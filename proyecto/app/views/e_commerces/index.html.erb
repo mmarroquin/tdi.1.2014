@@ -1,0 +1,25 @@
+<h1>Listing e_commerces</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @e_commerces.each do |e_commerce| %>
+      <tr>
+        <td><%= link_to 'Show', e_commerce %></td>
+        <td><%= link_to 'Edit', edit_e_commerce_path(e_commerce) %></td>
+        <td><%= link_to 'Destroy', e_commerce, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New E commerce', new_e_commerce_path %>

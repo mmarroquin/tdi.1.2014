@@ -1,5 +1,9 @@
 Proyecto::Application.routes.draw do
 
+  resources :e_commerces
+
+  resources :maps
+
   resources :pedidos
 
   resources :products
