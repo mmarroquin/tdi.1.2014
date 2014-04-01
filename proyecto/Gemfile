@@ -39,7 +39,7 @@ group :development do
 	gem 'quiet_assets' #ver si es con guion o no
 end
 
-gem 'spree'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
