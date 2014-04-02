@@ -1,0 +1,21 @@
+# Test environment
+top_srcdir='/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10'
+top_builddir='/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10'
+
+set -a
+COMPARE="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/utilities/compare"
+COMPOSITE="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/utilities/composite"
+CONJURE="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/utilities/conjure"
+CONVERT="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/utilities/convert"
+DISPLAY="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/utilities/display"
+IDENTIFY="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/utilities/identify"
+MONTAGE="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/utilities/montage" 
+VALIDATE="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/tests/validate"
+DRAWTEST="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/tests/drawtest"
+WANDTEST="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/tests/wandtest"
+LD_LIBRARY_PATH="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/magick/.libs:${LD_LIBRARY_PATH}"
+MAGICK_CODER_MODULE_PATH="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/coders"
+MAGICK_CONFIGURE_PATH="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/config:/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/config"
+MAGICK_FILTER_MODULE_PATH="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/filters"
+PATH="/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/utilities:/Users/ERG/tdi.1.2014/Spree/mystore/ImageMagick-6.8.8-10/tests:${PATH}"
+set +a

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140401220136) do
+ActiveRecord::Schema.define(version: 20140401235523) do
 
   create_table "spree_addresses", force: true do |t|
     t.string   "firstname"
@@ -529,6 +529,17 @@ ActiveRecord::Schema.define(version: 20140401220136) do
 
   add_index "spree_shipping_rates", ["shipment_id", "shipping_method_id"], name: "spree_shipping_rates_join_index", unique: true
 
+  create_table "spree_skrill_transactions", force: true do |t|
+    t.string   "email"
+    t.float    "amount"
+    t.string   "currency"
+    t.integer  "transaction_id"
+    t.integer  "customer_id"
+    t.string   "payment_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "spree_state_changes", force: true do |t|
     t.string   "name"
     t.string   "previous_state"
@@ -696,13 +707,14 @@ ActiveRecord::Schema.define(version: 20140401220136) do
     t.string   "authentication_token"
     t.string   "unlock_token"
     t.datetime "locked_at"
-    t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "spree_api_key",          limit: 48
+    t.datetime "remember_created_at"
   end
 
+  add_index "spree_users", ["email"], name: "email_idx_unique", unique: true
   add_index "spree_users", ["spree_api_key"], name: "index_spree_users_on_spree_api_key"
 
   create_table "spree_variants", force: true do |t|
