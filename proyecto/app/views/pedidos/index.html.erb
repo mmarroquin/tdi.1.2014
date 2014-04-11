@@ -3,7 +3,12 @@
 <table>
   <thead>
     <tr>
-      <th>Datos no se que</th>
+      <th>Nombre Cliente</th>
+      <th>Fecha Pedido</th>
+      <th>Direccion</th>
+      <th>Estado Pedido</th>
+      <th>Latitud</th>
+      <th>Longitud</th>
       <th></th>
       <th></th>
       <th></th>
@@ -13,15 +18,23 @@
   <tbody>
     <% @pedidos.each do |pedido| %>
       <tr>
-        <td><%= pedido.date %></td>
-        <td><%= link_to 'Show', pedido %></td>
-        <td><%= link_to 'Edit', edit_pedido_path(pedido) %></td>
-        <td><%= link_to 'Destroy', pedido, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= pedido.nombrecliente %></td>
+        <td><%= pedido.created_at %></td>
+        <td><%= pedido.address %></td>
+        <td><%= pedido.state.to_s + "%" %></td>
+        <td><%= pedido.latitude %></td>
+        <td><%= pedido.longitude %></td>
+        <td><%= link_to 'Ver', pedido %></td>
+        <td><%= link_to 'Editar', edit_pedido_path(pedido) %></td>
+        <td><%= link_to 'Borrar', pedido, method: :delete, data: { confirm: 'Estás seguro?' } %></td>
       </tr>
     <% end %>
+    
   </tbody>
 </table>
 
 <br>
 
 <%= link_to 'New Pedido', new_pedido_path %>
+<br>
+<%= link_to 'Mapa Pedidos', maps_path, 'data-no-turbolink' => true%>

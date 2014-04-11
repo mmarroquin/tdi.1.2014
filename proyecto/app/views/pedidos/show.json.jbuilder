@@ -1,1 +1,1 @@
-json.extract! @pedido, :id, :date, :created_at, :updated_at
+json.extract! @pedido, :id, :nombrecliente, :created_at, :address, :state, :latitude, :longitude, :updated_at

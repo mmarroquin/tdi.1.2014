@@ -4,7 +4,16 @@ class MapsController < ApplicationController
   # GET /maps
   # GET /maps.json
   def index
-    @maps = Map.all
+    @pedidos = Pedido.all
+    @hash = Gmaps4rails.build_markers(@pedidos) do |pedido, marker|
+      marker.lat pedido.latitude
+      marker.lng pedido.longitude
+      marker.json({title: 'Pedido: ' + pedido.id.to_s})
+      #sumar más info en la infowindow!!!!!!******
+      marker.json({infowindow: "<p>" + "Nombre Cliente: " + pedido.nombrecliente + "<br />" + 
+                  "Dirección: " + pedido.address + "<br />" + "ID Pedido: " + pedido.id.to_s + "<br />" + "Estado Pedido: " + pedido.state.to_s + "%" +
+                  "</p>"})
+    end
   end
 
   # GET /maps/1

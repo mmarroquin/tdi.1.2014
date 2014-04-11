@@ -31,7 +31,11 @@ ActiveRecord::Schema.define(version: 20140401183614) do
   end
 
   create_table "pedidos", force: true do |t|
-    t.datetime "date"
+    t.string   "nombrecliente"
+    t.string   "address"
+    t.integer  "state"
+    t.float    "latitude"
+    t.float    "longitude"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

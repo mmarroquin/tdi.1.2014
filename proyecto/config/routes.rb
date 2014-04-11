@@ -65,5 +65,6 @@ Proyecto::Application.routes.draw do
   #     resources :products
   #   end
   
-  root :controller => 'clients', :action => :index
+  #cambie clients por pedidos!!!!!***
+  root :controller => 'pedidos', :action => :index
 end

@@ -1,9 +1,29 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Date:</strong>
-  <%= @pedido.date %>
+  <strong>Nombre Cliente:</strong>
+  <%= @pedido.nombrecliente %>
+</p>
+<p>
+  <strong>Fecha Pedido:</strong>
+  <%= @pedido.created_at %>
+</p>
+<p>
+  <strong>Direccion</strong>
+  <%= @pedido.address %>
+</p>
+<p>
+  <strong>Estado Pedido</strong>
+  <%= @pedido.state.to_s + "%" %>
+</p>
+<p>
+  <strong>Latitud</strong>
+  <%= @pedido.latitude %>
+</p>
+<p>
+  <strong>Longitud</strong>
+  <%= @pedido.longitude %>
 </p>
 
-<%= link_to 'Edit', edit_pedido_path(@pedido) %> |
-<%= link_to 'Back', pedidos_path %>
+<%= link_to 'Editar', edit_pedido_path(@pedido) %> |
+<%= link_to 'Atrás', pedidos_path %>
