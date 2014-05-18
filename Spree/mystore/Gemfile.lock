@@ -326,11 +326,11 @@ DEPENDENCIES
   money (= 6.0.1)
   quiet_assets
   rails (= 4.0.4)
-<<<<<<< HEAD
+
   rake (>= 0.8.0)
-=======
+
   rest-client
->>>>>>> 85e18dbd38b3fa00091bf081fdad8b2537d017ea
+
   sass-rails (~> 4.0.2)
   sdoc
   spree (= 2.2.1)
