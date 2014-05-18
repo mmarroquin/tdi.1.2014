@@ -79,4 +79,5 @@ gemspec :name => "google_drive"
 
 gem 'rest-client'
 
-
+gem 'net-sftp'
+gem 'net-ssh'
