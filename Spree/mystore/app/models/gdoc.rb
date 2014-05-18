@@ -34,7 +34,7 @@ class Gdoc < ActiveRecord::Base
 	# Reloads the worksheet to get changes by other clients.
 	ws.reload()
 
-	def self.fecha
+	def self.obtain_date
 		# Logs in.
 		# You can also use OAuth. See document of
 		# GoogleDrive.login_with_oauth for details.
@@ -47,7 +47,7 @@ class Gdoc < ActiveRecord::Base
 		return ws[2, 2]
 	end
 
-	def self.filas
+	def self.obtain_rows
 		# Logs in.
 		# You can also use OAuth. See document of
 		# GoogleDrive.login_with_oauth for details.
@@ -63,13 +63,13 @@ class Gdoc < ActiveRecord::Base
 		return inform.drop(4)
 	end
 
-	#def self.a_ejecutar_cada_semana
-	#	fecha = Gdoc.fecha
-	#    filas = Gdoc.filas
+	def self.obtain_info
+		datee = Gdoc.obtain_date
+	    rows = Gdoc.obtain_rows
 
-	#	filas.each do |n|
-	#    	ProductosNuevos.create(:SKU => n[0], :cliente => n[1], :cantidad => n[2], :utilizado => n[3])
-	#    end
-	#    return 0
-	#end
+		rows.each do |n|
+	    	ProductReservation.create(:date => datee, :sku => n[0], :client => n[1], :amount => n[2], :used => n[3])
+	    end
+	    return 0
+	end
 end

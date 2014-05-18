@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140518205311) do
+ActiveRecord::Schema.define(version: 20140518224320) do
 
   create_table "gdocs", force: true do |t|
     t.datetime "created_at"
@@ -25,6 +25,14 @@ ActiveRecord::Schema.define(version: 20140518205311) do
     t.time     "final_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "reservations", force: true do |t|
+    t.string  "sku"
+    t.string  "client"
+    t.date    "date"
+    t.integer "amount"
+    t.boolean "used"
   end
 
   create_table "sftps", force: true do |t|

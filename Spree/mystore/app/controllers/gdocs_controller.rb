@@ -5,8 +5,8 @@ class GdocsController < ApplicationController
   # GET /gdocs.json
   def index
     @gdocs = Gdoc.all
-    @fecha = Gdoc.fecha
-    @filas = Gdoc.filas
+    @datee = Gdoc.obtain_date
+    @rowss = Gdoc.obtain_rows
 
 #    @filas.each do |n|
 #      ProductosNuevos.create(:SKU => n[0], :cliente => n[1], :cantidad => n[2], :utilizado => n[3])
