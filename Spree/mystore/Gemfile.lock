@@ -321,16 +321,14 @@ DEPENDENCIES
   binding_of_caller
   coffee-rails (~> 4.0.0)
   google_drive!
+  highline (>= 1.5.1)
   jbuilder (~> 1.2)
   jquery-rails
   money (= 6.0.1)
   quiet_assets
   rails (= 4.0.4)
-
   rake (>= 0.8.0)
-
   rest-client
-
   sass-rails (~> 4.0.2)
   sdoc
   spree (= 2.2.1)

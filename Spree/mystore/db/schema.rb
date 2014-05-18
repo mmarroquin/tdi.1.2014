@@ -11,7 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140411180511) do
+ActiveRecord::Schema.define(version: 20140518205311) do
+
+  create_table "gdocs", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "products", force: true do |t|
+    t.string   "sku"
+    t.string   "price"
+    t.time     "start_date"
+    t.time     "final_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sftps", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "spree_addresses", force: true do |t|
     t.string   "firstname"
