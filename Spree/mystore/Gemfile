@@ -77,4 +77,6 @@ gem 'spree_fancy', :git => 'https://github.com/spree/spree_fancy', :branch => '2
 
 gemspec :name => "google_drive"
 
+gem 'rest-client'
+
 

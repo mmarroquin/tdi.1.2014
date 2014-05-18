@@ -1,0 +1,253 @@
+= vtiger
+* http://estormtech.com
+This gem provides access to vtiger from ruby.  It uses the vtiger web services to access the data in  vtiger system. 
+
+See the binary files to test the system. 
+
+== DESCRIPTION:
+
+There are a set of base commands  (eg hpttp get, http post, login, challenge etc)
+And commands which are more specific to the actual usage such as addlead, describe object
+
+Options can be passed as hash  or preset using a Class variable  (which is why the cattr_accessor definition is required from activesupport)
+
+Vtiger::API.api_settings = {
+    :username => 'admin',
+    :key => 'ssss'
+    :url => 'democrm.estormtech.com'
+  }
+
+
+
+== FEATURES/PROBLEMS:
+
+many commands to add via webservices including add trouble ticket, add contact etc.
+queries,
+describe object
+list entities 
+many commands are supported
+
+are all running
+
+Now has find_by_email_id
+
+== SYNOPSIS:
+
+  	 Vtiger::Api.api_settings = {
+       :username => 'admin',
+       :key => 'ssss',
+       :url => 'democrm.estormtech.com',
+       :element_type => 'Contacts'
+     }
+   cmd = Vtiger::Commands.new()
+   challenge=cmd.challenge({})
+   login=cmd.login({})
+    cmd.add_lead  etc...
+
+== REQUIREMENTS:
+now using yajl as  replacement to json.gem
+
+== DIRECT DB ACCESS
+Can now directly access Vtiger DB to run some queries.  See base.rb campaignlist etc.
+
+
+== INSTALL:
+
+find userid from vtiger_users  (supposed to be in preferences section)
+select username,accessKey from vtiger_users;
+ == USAGE with new factory
+	 api ={
+        :username => 'admin',
+      :key => 'xxxx',
+       # :username => 'admin',
+       # :key => 'xxxx',
+        :url => 'democrm.estormtech.com',
+      }
+  cmd = Vtiger::Commands.vtiger_factory(api)
+
+tokens are stored in
+ vtiger_ws_userauthtoken  
+
+==== Usage:
+Server Types: list types on the server
+ list_types.rb -u democrm.estormtech.com  -n scott -k xxxxx
+
+Describe Object:
+ describe_object.rb -u crm.estormtech.com  -n admin  -k xx  -e Contacts
+
+Getting the custom field ids
+ describe_object.rb -u crm.estormtech.com  -n admin  -k xxx  -e Contacts | grep for the label name
+
+
+== Testing via Curl
+Testing via curl
+
+
+ curl -d username=scott -d accessKey=xxx http://crm.yoururl.com/webservice.php?operation=login
+Name":"3a8b6b834a63eb909ecfa","userId":"19x5","version":"0.2","vtigerVersion":"5.1.0 RC"}}
+
+
+
+List types
+
+
+{
+  "success": true,
+  "result": {
+    "types": [
+      "Calendar",
+      "Leads",
+      "Accounts",
+      "Contacts",
+      "Potentials",
+      "Products",
+      "Documents",
+      "Emails",
+      "HelpDesk",
+      "Faq",
+      "Vendors",
+      "PriceBooks",
+      "Quotes",
+      "PurchaseOrder",
+      "SalesOrder",
+      "Invoice",
+      "Campaigns",
+      "Events",
+      "Users",
+      "ServiceContracts",
+      "PBXManager",
+      "Services",
+      "Groups",
+      "Currency",
+      "DocumentFolders"
+    ],
+    "information": {
+      "Calendar": {
+        "isEntity": true,
+        "label": "Calendar",
+        "singular": "To Do"
+      },
+      "Leads": {
+        "isEntity": true,
+        "label": "Leads",
+        "singular": "Lead"
+      },
+      "Accounts": {
+        "isEntity": true,
+        "label": "Accounts",
+        "singular": "Account"
+      },
+      "Contacts": {
+        "isEntity": true,
+        "label": "Contacts",
+        "singular": "Contact"
+      },
+      "Potentials": {
+        "isEntity": true,
+        "label": "Potentials",
+        "singular": "Potential"
+      },
+      "Products": {
+        "isEntity": true,
+        "label": "Products",
+        "singular": "Product"
+      },
+      "Documents": {
+        "isEntity": true,
+        "label": "Documents",
+        "singular": "Document"
+      },
+      "Emails": {
+        "isEntity": true,
+        "label": "Email",
+        "singular": "Email"
+      },
+      "HelpDesk": {
+        "isEntity": true,
+        "label": "Trouble Tickets",
+        "singular": "Ticket"
+      },
+      "Faq": {
+        "isEntity": true,
+        "label": "FAQ",
+        "singular": "Faq"
+      },
+      "Vendors": {
+        "isEntity": true,
+        "label": "Vendors",
+        "singular": "Vendor"
+      },
+      "PriceBooks": {
+        "isEntity": true,
+        "label": "Price Books",
+        "singular": "PriceBook"
+      },
+      "Quotes": {
+        "isEntity": true,
+        "label": "Quotes",
+        "singular": "Quote"
+      },
+      "PurchaseOrder": {
+        "isEntity": true,
+        "label": "Purchase Order",
+        "singular": "PurchaseOrder"
+      },
+      "SalesOrder": {
+        "isEntity": true,
+        "label": "Sales Order",
+        "singular": "SalesOrder"
+      },
+      "Invoice": {
+        "isEntity": true,
+        "label": "Invoice",
+        "singular": "Invoice"
+      },
+      "Campaigns": {
+        "isEntity": true,
+        "label": "Campaigns",
+        "singular": "Campaign"
+      },
+      "Events": {
+        "isEntity": true,
+        "label": "Events",
+        "singular": "Event"
+      },
+      "Users": {
+        "isEntity": true,
+        "label": "Users",
+        "singular": "User"
+      },
+      "ServiceContracts": {
+        "isEntity": true,
+        "label": "Service Contracts",
+        "singular": "Service Contract"
+      },
+      "PBXManager": {
+        "isEntity": true,
+        "label": "PBX Manager",
+        "singular": "SINGLE_PBXManager"
+      },
+      "Services": {
+        "isEntity": true,
+        "label": "Services",
+        "singular": "Service"
+      },
+      "Groups": {
+        "isEntity": false,
+        "label": "Groups",
+        "singular": "Groups"
+      },
+      "Currency": {
+        "isEntity": false,
+        "label": "Currency",
+        "singular": "Currency"
+      },
+      "DocumentFolders": {
+        "isEntity": false,
+        "label": "DocumentFolders",
+        "singular": "DocumentFolders"
+      }
+    }
+  }
+}
+-------------finished processing!!!
