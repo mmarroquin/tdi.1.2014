@@ -2,6 +2,8 @@ Mystore::Application.routes.draw do
 
   resources :sftps
 
+  resources :products
+
   get "elcontrolador/elmetodo"
   get "greetings/hello"
   # This line mounts Spree's routes at the root of your application.
