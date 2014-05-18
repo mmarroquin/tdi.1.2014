@@ -29,6 +29,14 @@ gem 'jbuilder', '~> 1.2'
 
 #gem 'spree'
 
+group :development do
+	gem 'better_errors'
+	gem 'binding_of_caller'
+
+	gem 'quiet_assets' #ver si es con guion o no
+end
+
+
 gem 'money', '6.0.1'
 
 group :doc do
@@ -49,6 +57,24 @@ end
 # gem 'debugger', group: [:development, :test]
 
 
+#gem 'spree', '2.2.1'
+#gem 'spree_gateway'#, github: 'spree/spree_gateway', branch: '1-3-stable'
+#gem 'spree_auth_devise', :git => 'https://github.com/spree/spree_auth_devise.git', :branch => '2-2-stable'
+#gem 'spree_gateway', :git => 'https://github.com/spree/spree_gateway.git', :branch => '2-2-stable'
 gem 'spree', '2.2.1'
 gem 'spree_gateway', :git => 'https://github.com/spree/spree_gateway.git', :branch => '2-2-stable'
 gem 'spree_auth_devise', :git => 'https://github.com/spree/spree_auth_devise.git', :branch => '2-2-stable'
+
+
+
+#gem 'spree_blue_theme', :git => 'git://github.com/spree/spree_blue_theme.git'
+#gem 'spree_blue_theme', :git => 'https://github.com/spree/spree_blue_theme.git'
+#gem 'spree_fancy', :git => 'https://github.com/spree/spree_fancy.git'
+#Funciona!
+gem 'spree_fancy', :git => 'https://github.com/spree/spree_fancy', :branch => '2-2-stable'
+#bunde install
+#bundle exec rails g spree_fancy:install
+
+gem 'rest-client'
+
+
