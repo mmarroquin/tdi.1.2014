@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140518235600) do
+ActiveRecord::Schema.define(version: 20140519164134) do
 
   create_table "gdocs", force: true do |t|
     t.datetime "created_at"
@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(version: 20140518235600) do
   create_table "products", force: true do |t|
     t.string   "sku"
     t.string   "price"
-    t.time     "start_date"
-    t.time     "final_date"
+    t.string   "start_date"
+    t.string   "final_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
