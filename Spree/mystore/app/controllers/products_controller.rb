@@ -10,6 +10,7 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+
   end
 
   # GET /products/new
@@ -73,23 +74,19 @@ class ProductsController < ApplicationController
     end
 
   def read_csv
-    @columns = "SIN ERROR"
-    @rows = []
+    @errors = []
     filename = '/home/administrator/commandsapp/llamarRuby/outputJava.csv'
     file = File.new(filename, 'r')
-
     file.each_line("\n") do |row|
       columns = row.split(',')
       begin
-        fi = columns[3].split('/')
-        fechaI = fi[1]+'/'+fi[0]+'/'+fi[2]
-        feIn = Time.parse(fechaI)
-        ff = columns[4].split('/')
-        fechaI = ff[1]+'/'+ff[0]+'/'+ff[2]
-        feFi = Time.parse(fechaI)
-        Product.create(:sku=>columns[1], :precio=>columns[2], :fecha_inico=>feIn, :fecha_fin=>feFi)
+        aux = Product.where(:sku=>columns[1], :price=>columns[2], :start_date=>columns[3], :final_date=>columns[4]).first
+        if aux == nil
+          Product.create(:sku=>columns[1], :price=>columns[2], :start_date=>columns[3], :final_date=>columns[4])
+        end
       rescue Exception => e
-        @rows << columns
-      end     
+        @errors << columns
+      end
     end
+  end    
 end
