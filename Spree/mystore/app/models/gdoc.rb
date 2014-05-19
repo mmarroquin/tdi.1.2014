@@ -64,11 +64,24 @@ class Gdoc < ActiveRecord::Base
 	end
 
 	def self.obtain_info
-		datee = Gdoc.obtain_date
-	    rows = Gdoc.obtain_rows
+		@datee = Gdoc.obtain_date
+	    @rows = Gdoc.obtain_rows
 
-		rows.each do |n|
-	    	Reservation.create(:date => datee, :sku => n[0], :client => n[1], :amount => n[2], :used => n[3])
+		@rows.each do |n|
+			begin
+				if n[3] == ''
+					auxi = nil
+				else
+					auxi = n[3]
+				end
+					
+				aux = Reservation.where(:date => Date.parse(@datee), :sku => n[0], :client => n[1], :amount => n[2], :used => auxi).first
+				if aux == nil
+					Reservation.create(:date => @datee, :sku => n[0], :client => n[1], :amount => n[2], :used => n[3])
+				end
+			rescue
+				#dosomething
+			end
 	    end
 	    return 0
 	end
