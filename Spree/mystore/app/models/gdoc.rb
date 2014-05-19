@@ -68,7 +68,7 @@ class Gdoc < ActiveRecord::Base
 	    rows = Gdoc.obtain_rows
 
 		rows.each do |n|
-	    	ProductReservation.create(:date => datee, :sku => n[0], :client => n[1], :amount => n[2], :used => n[3])
+	    	Reservation.create(:date => datee, :sku => n[0], :client => n[1], :amount => n[2], :used => n[3])
 	    end
 	    return 0
 	end

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sku: MyString
+  date: 2014-05-19
+  client: MyString
+  amount: 1
+  used: false
+
+two:
+  sku: MyString
+  date: 2014-05-19
+  client: MyString
+  amount: 1
+  used: false
