@@ -25,11 +25,13 @@ class Sftp < ActiveRecord::Base
 	          thing = doc.xpath("//Pedido")
 	          fecha = doc.xpath("//fecha").map{ |node| node.text.strip }
 	          rut = doc.xpath("//rut").map{ |node| node.text.strip }
+	          direc_id = doc.xpath("//direccionId").map{ |node| node.text.strip }
+
 	          chld = thing.map do |node|
 	            node.children.map{ |n| [n.name, n.text.strip] if n.elem? }.compact
 	          end.compact
 	          if not FileOrder.exists?(:no_order => n_pedido) #and false
-	         	FileOrder.create(:date => fecha[0], :no_order => n_pedido, :rut => rut[0])
+	         	FileOrder.create(:date => fecha[0], :no_order => n_pedido, :rut => rut[0], :direcc_id =>direc_id)
 	          	
 	      	    chld.each do |ord|
 	      	    	sku = ord[0][1]
@@ -53,7 +55,7 @@ class Sftp < ActiveRecord::Base
       end
       
      end
-     return aux
+     
   	end
 
   	def self.csv
