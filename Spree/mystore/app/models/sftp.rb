@@ -14,7 +14,7 @@ class Sftp < ActiveRecord::Base
           @chld = @thing.map do |node|
             node.children.map{ |n| [n.name, n.text.strip] if n.elem? }.compact
           end.compact
-
+          
           @error = "Con error"
         rescue
         end
@@ -27,7 +27,6 @@ class Sftp < ActiveRecord::Base
         #end
         
       end
-
      end
   	end
 end
