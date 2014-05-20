@@ -6,6 +6,8 @@ class Schedule < ActiveRecord::Base
 	def self.main
 
 		Sftp.orders
+		Sftp.csv
+		WebProduct.read
 		#Esteban retorna true y queda listo
 		@ordenes = Order.all
 		producto = []
@@ -17,7 +19,9 @@ class Schedule < ActiveRecord::Base
 				direccion = Schedule.crm(p.rut, p.direcc_id)
 				Product.readcsv
 
-				Stock.despachar(producto, direccion, p.no_order)
+				despacho  = Stock.despachar(producto, direccion, p.no_order)
+
+				Report.create(:n_pedido =>p.no_order, :despachado =>despacho, :fecha =>  p.date)
 			end
 		end
 		
