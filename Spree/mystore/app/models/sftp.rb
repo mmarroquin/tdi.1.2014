@@ -31,7 +31,7 @@ class Sftp < ActiveRecord::Base
 	            node.children.map{ |n| [n.name, n.text.strip] if n.elem? }.compact
 	          end.compact
 	          if not FileOrder.exists?(:no_order => n_pedido) #and false
-	         	FileOrder.create(:date => fecha[0], :no_order => n_pedido, :rut => rut[0], :direcc_id =>direc_id)
+	         	FileOrder.create(:date => fecha[0], :no_order => n_pedido, :rut => rut[0], :direcc_id =>direc_id[0])
 	          	
 	      	    chld.each do |ord|
 	      	    	sku = ord[0][1]
