@@ -5,17 +5,21 @@ class Sftp < ActiveRecord::Base
 	 count = 0
 	 fecha = 0
 	 rut = 0
+     datas = []
+     aux = 0
      Net::SFTP.start('integra.ing.puc.cl', 'grupo1', :password => 'lsiudhf93') do |sftp|
       data = sftp.download!("/home/grupo1/Pedidos/pedido_525.xml")
       files = sftp.dir.entries("/home/grupo1/Pedidos")
-      datas = []
+      
       sftp.dir.entries("/home/grupo1/Pedidos").each do |remote_file|
         file = sftp.file.open("/home/grupo1/Pedidos/"+remote_file.name)
-        n_pedido = remote_file.name.split("_")[0]
-        
-        if count > 4
-	        
+        begin
+        	n_pedido = remote_file.name.split("_")[1].split(".")[0]
+        rescue
+        end
+        if count > 2
 	    #    begin
+	    	datas << remote_file.name
 	          xml_str = file.read
 	          doc = Nokogiri::XML(xml_str)
 	          thing = doc.xpath("//Pedido")
@@ -24,14 +28,23 @@ class Sftp < ActiveRecord::Base
 	          chld = thing.map do |node|
 	            node.children.map{ |n| [n.name, n.text.strip] if n.elem? }.compact
 	          end.compact
-	          if FileOrder.where(:no_roder => n_pedido).first == nil
-	          	FileOrder.create(:date => fecha, :no_order => n_pedido)
-	          	Order.create()
+	          if not FileOrder.exists?(:no_order => n_pedido) #and false
+	         	FileOrder.create(:date => fecha[0], :no_order => n_pedido, :rut => rut[0])
+	          	
+	      	    chld.each do |ord|
+	      	    	sku = ord[0][1]
+	      	    	aux = ord
+	      	    	quantity = ord[1][1]
+	                Order.create(:id_order => n_pedido, :quantity => quantity, :sku_order => sku)
+	        	end
+	          end
 	          #chld = 1
 	     #   rescue
-	     #   end
+	      
 	    end
 	    count += 1
+	    #end
+	    
 	    #begin 
         #  @datas << file.read
         #rescue
@@ -40,7 +53,7 @@ class Sftp < ActiveRecord::Base
       end
       
      end
-     return chld, fecha, rut
+     return aux
   	end
 
   	def self.csv

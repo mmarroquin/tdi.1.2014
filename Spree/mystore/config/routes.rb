@@ -1,5 +1,8 @@
 Mystore::Application.routes.draw do
 
+
+  root 'sftps#index'
+
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       match '/pedirProducto' => 'request#create', via: :post

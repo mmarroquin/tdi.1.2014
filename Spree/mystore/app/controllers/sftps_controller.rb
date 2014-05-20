@@ -5,7 +5,7 @@ class SftpsController < ApplicationController
   # GET /sftps.json
   def index
     @sftps = Sftp.all
-    @chld = Sftp.csv
+    @chld = Sftp.orders
   end
 
   # GET /sftps/1
