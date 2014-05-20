@@ -5,6 +5,8 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @products = Product.all
+    @var = WebProduct.read
+
   end
 
   # GET /products/1

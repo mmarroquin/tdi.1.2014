@@ -2,6 +2,7 @@ Mystore::Application.routes.draw do
 
 
   root 'sftps#index'
+  resources :reports
 
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
