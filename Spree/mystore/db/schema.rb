@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140520185822) do
+ActiveRecord::Schema.define(version: 20140520193414) do
 
   create_table "file_orders", force: true do |t|
     t.string   "no_order"
@@ -38,6 +38,15 @@ ActiveRecord::Schema.define(version: 20140520185822) do
     t.string   "price"
     t.string   "start_date"
     t.string   "final_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "reports", force: true do |t|
+    t.string   "n_pedido"
+    t.string   "despachado"
+    t.string   "quiebre"
+    t.string   "fecha"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

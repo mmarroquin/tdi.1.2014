@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>N pedido:</strong>
+  <%= @report.n_pedido %>
+</p>
+
+<p>
+  <strong>Despachado:</strong>
+  <%= @report.despachado %>
+</p>
+
+<p>
+  <strong>Quiebre:</strong>
+  <%= @report.quiebre %>
+</p>
+
+<p>
+  <strong>Fecha:</strong>
+  <%= @report.fecha %>
+</p>
+
+<%= link_to 'Edit', edit_report_path(@report) %> |
+<%= link_to 'Back', reports_path %>
+<%= link_to 'Destroy', @report, method: :delete, data: { confirm: 'Are you sure?' } %>
