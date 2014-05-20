@@ -33,8 +33,8 @@ class Stock < ActiveRecord::Base
 	    responsePrincipal = HTTParty.get(url,:query => { :almacenId => almacenPrincipal_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationPrincipal})
 	    responseRecepcion = HTTParty.get(url,:query => { :almacenId => almacenRecepcion_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationRecepcion})
 	    
-	    authorizationB = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET" + almacenDespacho_id))
-	    responseB = HTTParty.get(url,:query => { :almacenId => almacenDespacho_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationB})
+	    authorizationDespacho = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET" + almacenDespacho_id))
+	    responseDespacho = HTTParty.get(url,:query => { :almacenId => almacenDespacho_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationDespacho})
 
 	    espacioPedido = 0
 	    productos.each do |prod| 
@@ -154,6 +154,62 @@ class Stock < ActiveRecord::Base
 	
 	end
 
+	def self.despachar(productos, direccion, pedido_id)
+		success = true
+		reason = Hash.new
+	    user = "grupo1"
+	    password = "OuyMG5aD"
+	    authorization = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET"))
+	    url = "http://bodega-integracion-2014.herokuapp.com/almacenes"
+	    response = HTTParty.get(url,:headers => { "Authorization" => "UC "+ user + ":" + authorization})
+	    
+	    almacenDespacho_id = response.find { |almacen| almacen['despacho'] == true }["_id"]
+
+	    url = "http://bodega-integracion-2014.herokuapp.com/skusWithStock"
+	    authorizationDespacho = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET" + almacenDespacho_id))
+	    responseDespacho = HTTParty.get(url,:query => { :almacenId => almacenDespacho_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationDespacho})
+	    
+
+	    cantidadesMov = Hash.new
+	    productos.each do |prod| 
+
+		    cantidadProd = prod[:cant].to_i
+		    if responseDespacho.find { |producto| producto['_id'] == prod[:sku] }
+				url = "http://bodega-integracion-2014.herokuapp.com/stock"
+				authorizationStockD = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET" + almacenDespacho_id + prod[:sku]))
+		    	responseStockD = HTTParty.get(url,:query => { :almacenId => almacenDespacho_id, :sku => prod[:sku], :limit => cantidadProd },:headers => { "Authorization" => "UC "+ user + ":" + authorizationStockD})
+
+		    	prod["cant_mov"] = 0
+		    
+		    	responseStockD.each do |prodUnidad|
+					authorizationEnv = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "DELETE" + prodUnidad["_id"] + direccion + prod[:precio] + pedido_id))
+		    		responseEnv = HTTParty.delete(url,:body => { :productoId => prodUnidad["_id"], :direccion => direccion, :precio => prod[:precio], :pedidoId => pedido_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationEnv})
+		    		
+		    		if responseEnv.include?("error")
+			    		success = false
+			    		reason[prodUnidad["_id"]] = responseEnv["error"]
+			    	elsif !responseEnv["despachado"]
+			    		success = false
+			    		reason[prodUnidad["_id"]] = "No se pudo despachar el producto"
+			    	else
+			    		prod["cant_mov"] += 1
+		    		end 
+		    		
+		    	end	
+		    	cantidadesMov[prod[:sku]] = prod["cant_mov"]		    	
+
+		    else
+		      	success = false
+		      	reason[prod[:sku]] = "No existe en bodega de despacho el producto" 
+		    end 
+		    
+
+		end
+
+		return success, cantidadesMov, reason
+				
+	end 
+
 
 
 	def self.vaciarBodegaRecepcion
@@ -223,19 +279,19 @@ class Stock < ActiveRecord::Base
 	    almacenDespacho_id = almacenDespacho["_id"]
 
 		url = "http://bodega-integracion-2014.herokuapp.com/skusWithStock"
-		authorizationB = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET" + almacenDespacho_id))
-	    responseB = HTTParty.get(url,:query => { :almacenId => almacenDespacho_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationB})
+		authorizationDespacho = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET" + almacenDespacho_id))
+	    responseDespacho = HTTParty.get(url,:query => { :almacenId => almacenDespacho_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationDespacho})
 
 	    cantidadesMov = Hash.new
-	    responseB.each do |producto|
+	    responseDespacho.each do |producto|
 	    	url = "http://bodega-integracion-2014.herokuapp.com/stock"
-			authorizationStockB = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET" + almacenDespacho_id + producto["_id"]))
-		    responseStockB = HTTParty.get(url,:query => { :almacenId => almacenDespacho_id, :sku => producto["_id"] },:headers => { "Authorization" => "UC "+ user + ":" + authorizationStockB})
+			authorizationStockD = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET" + almacenDespacho_id + producto["_id"]))
+		    responseStockD = HTTParty.get(url,:query => { :almacenId => almacenDespacho_id, :sku => producto["_id"] },:headers => { "Authorization" => "UC "+ user + ":" + authorizationStockD})
 
 		    producto["cant_mov"] = 0
 		    url = "http://bodega-integracion-2014.herokuapp.com/moveStock"
 		    
-		    responseStockB.each do |prodUnidad|
+		    responseStockD.each do |prodUnidad|
 				authorizationMovi = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "POST" + prodUnidad["_id"] + almacenPrincipal_id))
 		    	responseMovi = HTTParty.post(url,:body => { :productoId => prodUnidad["_id"], :almacenId => almacenPrincipal_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationMovi})
 		    	
