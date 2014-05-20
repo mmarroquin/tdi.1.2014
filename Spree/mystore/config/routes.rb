@@ -1,5 +1,10 @@
 Mystore::Application.routes.draw do
 
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      match '/pedirProducto' => 'request#create', via: :post
+    end
+  end
 
   resources :gdocs
 

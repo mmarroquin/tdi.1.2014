@@ -58,8 +58,10 @@ class Stock < ActiveRecord::Base
 			      if stockPrincipal+stockRecepcion < prod[:cant].to_i
 			      	success = false
 			      	reason[prod[:sku]] = "No existe suficiente stock del producto"
+			      	if !prod.include?("api")
 			      	cantPedir = prod[:cant].to_i - stockPrincipal - stockRecepcion
 		    		pedirDespacho(user, almacenRecepcion_id, prod[:sku], cantPedir)
+		    		end
 		    	  elsif stockPrincipal+stockRecepcion-prod[:reserv].to_i < prod[:cant].to_i
 		    	  	success = false
 		    	  	reason[prod[:sku]] = "No existe stock disponible debido a reservas"
@@ -72,8 +74,10 @@ class Stock < ActiveRecord::Base
 		    else
 		      	success = false
 		      	reason[prod[:sku]] = "No existe en bodega el producto" 
+		      	if !prod.include?("api")
 		      	cantPedir = prod[:cant].to_i
-		    	pedirDespacho(user, almacenRecepcion_id, prod[:sku], cantPedir)  
+		    	pedirDespacho(user, almacenRecepcion_id, prod[:sku], cantPedir) 
+		    	end 
 		    end 
 		    
 
@@ -144,7 +148,7 @@ class Stock < ActiveRecord::Base
 		
 		else		
 			url =  "http://integra4.ing.puc.cl/api/pedirProducto"
-			response = HTTParty.post(url,:body => { :usuario => user, :password => encryptedPassword, :almacenId => almacen_id, :sku => sku, :cantidad => cantidad })
+			response = HTTParty.post(url,:body => { :usuario => user, :password => encryptedPassword, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
 			if !response.include?("error")
 				return response
 			else
