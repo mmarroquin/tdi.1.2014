@@ -7,7 +7,7 @@ class Stock < ActiveRecord::Base
   	format :json
 
   	def self.getStock (productos)
-		success = true
+		s["success"] = true
 		reason = Hash.new
 	    user = "grupo1"
 	    password = "OuyMG5aD"
@@ -56,23 +56,23 @@ class Stock < ActiveRecord::Base
 			      espacioPedido += prod[:cant].to_i
 
 			      if stockPrincipal+stockRecepcion < prod[:cant].to_i
-			      	success = false
+			      	s["success"] = false
 			      	reason[prod[:sku]] = "No existe suficiente stock del producto"
 			      	if !prod.include?("api")
 			      	cantPedir = prod[:cant].to_i - stockPrincipal - stockRecepcion
 		    		pedirDespacho(user, almacenRecepcion_id, prod[:sku], cantPedir)
 		    		end
-		    	  elsif stockPrincipal+stockRecepcion-prod[:reserv].to_i < prod[:cant].to_i
-		    	  	success = false
+		    	  elsif stockPrincipal+stockRecepcion-prod[:others_reserv].to_i < prod[:cant].to_i
+		    	  	s["success"] = false
 		    	  	reason[prod[:sku]] = "No existe stock disponible debido a reservas"
 			      elsif espacioPedido >  almacenDespacho_espacio
-			      	success = false 
+			      	s["success"] = false 
 			      	reason["espacio"] = "No existe capacidad en la bodega de despacho"
 	
 			      end
 		      
 		    else
-		      	success = false
+		      	s["success"] = false
 		      	reason[prod[:sku]] = "No existe en bodega el producto" 
 		      	if !prod.include?("api")
 		      	cantPedir = prod[:cant].to_i
@@ -83,8 +83,8 @@ class Stock < ActiveRecord::Base
 
 		end
 
-		if !success
-			return success, reason
+		if !s["success"]
+			return s, reason
 		end
 		
 		productos.each do |prod|
@@ -111,9 +111,9 @@ class Stock < ActiveRecord::Base
 				authorizationMovi = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "POST" + prodUnidad["_id"] + almacenDespacho_id))
 		    	responseMovi = HTTParty.post(url,:body => { :productoId => prodUnidad["_id"], :almacenId => almacenDespacho_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationMovi})
 		    	if responseMovi.include?("error")
-			    	success = false
+			    	s["success"] = false
 			    	reason["error"] = responseMovi["error"]
-			    	return success, reason
+			    	return s, reason
 		    	end 
 		    end	
 
@@ -123,15 +123,15 @@ class Stock < ActiveRecord::Base
 				authorizationMovi = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "POST" + prodUnidad["_id"] + almacenDespacho_id))
 		    	responseMovi = HTTParty.post(url,:body => { :productoId => prodUnidad["_id"], :almacenId => almacenDespacho_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationMovi})
 		  		if responseMovi.include?("error")
-			    	success = false
+			    	s["success"] = false
 			    	reason["error"] = responseMovi["error"]
-			    	return success, reason
+			    	return s, reason
 		    	end   
 		    end	
 
 		end   	
 		reason["resultado"] = "Existe stock y este fue movido a la Bodega de Despacho"
-		return success, reason
+		return s, reason
 	end  
 
 

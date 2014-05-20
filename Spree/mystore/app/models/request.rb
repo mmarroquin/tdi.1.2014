@@ -1,16 +1,23 @@
 class Request < ActiveRecord::Base
 	
 
-	def self.pedirProducto (usuario, password, almacenId, sku, cant)
-		aux = [{:sku => sku, :cant => cant, :reserv => "0", :api => true}]
+	def self.pedirProducto (almacenId, sku, cant)
+		cliente_id = ""
+		reserva_otros = Gdoc.return_reservation(sku, cliente_id)
+		aux = [{:sku => sku, :cant => cant, :reserv => reserva_otros.to_s, :api => true}]
 		respuesta = Stock.getStock(aux)
 		if respuesta[:success]
-			return enviarBodega(aux, almacenId)
+			return enviarABodega(aux, almacenId)
+	
+		else
+			su["success"] = respuesta[:success]
+			cantidadMov["cantMov"] = 0
+			return su, cantidadMov, respuesta[:reason]
 		end
 
 	end
 
-	def self.enviarBodega(productos, almacenId)
+	def self.enviarABodega(productos, almacenId)
 		s["success"] = true
 		reason = Hash.new
 	    user = "grupo1"

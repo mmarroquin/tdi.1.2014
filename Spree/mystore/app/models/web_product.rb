@@ -1,5 +1,7 @@
 require 'json'
 class WebProduct < ActiveRecord::Base
+
+	belongs_to :order
 	def self.read
 		file = open ("/home/valentina/productos(1).json")
 		json = file.read
@@ -11,4 +13,5 @@ class WebProduct < ActiveRecord::Base
 		end
 		return a
 	end
+
 end
