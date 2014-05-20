@@ -1,9 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  n_pedido: MyString
-  rut: MyString
+  id_order: MyString
+  sku_order: MyString
+  quantity: MyString
 
 two:
-  n_pedido: MyString
-  rut: MyString
+  id_order: MyString
+  sku_order: MyString
+  quantity: MyString

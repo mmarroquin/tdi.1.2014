@@ -1,3 +1,3 @@
 class Order < ActiveRecord::Base
-	has_many :web_products
+	belongs_to :file_order
 end

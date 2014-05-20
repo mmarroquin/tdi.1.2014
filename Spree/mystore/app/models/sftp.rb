@@ -11,6 +11,7 @@ class Sftp < ActiveRecord::Base
       datas = []
       sftp.dir.entries("/home/grupo1/Pedidos").each do |remote_file|
         file = sftp.file.open("/home/grupo1/Pedidos/"+remote_file.name)
+        n_pedido = remote_file.name.split("_")[0]
         
         if count > 4
 	        
@@ -23,6 +24,9 @@ class Sftp < ActiveRecord::Base
 	          chld = thing.map do |node|
 	            node.children.map{ |n| [n.name, n.text.strip] if n.elem? }.compact
 	          end.compact
+	          if FileOrder.where(:no_roder => n_pedido).first == nil
+	          	FileOrder.create(:date => fecha, :no_order => n_pedido)
+	          	Order.create()
 	          #chld = 1
 	     #   rescue
 	     #   end
