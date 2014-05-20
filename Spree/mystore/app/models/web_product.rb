@@ -3,7 +3,7 @@ class WebProduct < ActiveRecord::Base
 
 	belongs_to :order
 	def self.read
-		file = open ("/Dropbox/Grupo1/productos.json")
+		file = open ("/home/administrator/Dropbox/Grupo1/productos.json")
 		json = file.read
 		product = ActiveSupport::JSON.decode(json)
 		product.each do |aux|
