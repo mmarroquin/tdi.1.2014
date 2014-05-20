@@ -75,6 +75,11 @@ gem 'spree_fancy', :git => 'https://github.com/spree/spree_fancy', :branch => '2
 #bunde install
 #bundle exec rails g spree_fancy:install
 
+gemspec :name => "google_drive"
+gem "highline", ">= 1.5.1", :group => :test
 
 
+gem 'rest-client'
 
+gem 'net-sftp'
+gem 'net-ssh'

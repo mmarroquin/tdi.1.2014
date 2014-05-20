@@ -1,0 +1,33 @@
+<h1>Listing gdocs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @gdocs.each do |gdoc| %>
+      <tr>
+        <td><%= link_to 'Show', gdoc %></td>
+        <td><%= link_to 'Edit', edit_gdoc_path(gdoc) %></td>
+        <td><%= link_to 'Destroy', gdoc, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+
+    Fecha: <br>
+    <%= @datee %>
+
+    <br> <br>
+
+    Filas: <br>
+    <%= @rowss %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Gdoc', new_gdoc_path %>

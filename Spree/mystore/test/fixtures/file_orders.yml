@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  no_order: MyString
+  date: MyString
+
+two:
+  no_order: MyString
+  date: MyString

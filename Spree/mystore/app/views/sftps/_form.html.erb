@@ -1,0 +1,17 @@
+<%= form_for(@sftp) do |f| %>
+  <% if @sftp.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sftp.errors.count, "error") %> prohibited this sftp from being saved:</h2>
+
+      <ul>
+      <% @sftp.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,32 @@
+<h1>Listing sftps</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+
+<%= @chld %>
+
+
+
+
+
+  <tbody>
+    <% @sftps.each do |sftp| %>
+      <tr>
+        <td><%= link_to 'Show', sftp %></td>
+        <td><%= link_to 'Edit', edit_sftp_path(sftp) %></td>
+        <td><%= link_to 'Destroy', sftp, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sftp', new_sftp_path %>

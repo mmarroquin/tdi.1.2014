@@ -1,0 +1,30 @@
+
+
+<h1><b>Reportes</b></h1>
+
+<table border="1" style="width:300px">
+  <thead>
+    <tr>
+      <td BGCOLOR="#8D98A4"><b><font color=#ffffff>N pedido</b></td>
+      <td BGCOLOR="#8D98A4"><b><font color=#ffffff>Despachado</b></td>
+      <td BGCOLOR="#8D98A4"><b><font color=#ffffff>Quiebre</b></td>
+      <td BGCOLOR="#8D98A4"><b><font color=#ffffff>Fecha</b></td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @reports.each do |report| %>
+      <tr>
+        <td BGCOLOR="#DAE1E8"><%= link_to report.n_pedido, report %></td>
+        <td BGCOLOR="#DAE1E8"><%= report.despachado %></td>
+        <td BGCOLOR="#DAE1E8"><%= report.quiebre %></td>
+        <td BGCOLOR="#DAE1E8"><%= report.fecha %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Report', new_report_path %>
