@@ -11,9 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 20140520202222) do
-
+ActiveRecord::Schema.define(version: 20140520203643) do
 
   create_table "file_orders", force: true do |t|
     t.string   "no_order"
@@ -60,6 +58,11 @@ ActiveRecord::Schema.define(version: 20140520202222) do
     t.string   "client"
     t.integer  "amount"
     t.boolean  "used"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "schedules", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
