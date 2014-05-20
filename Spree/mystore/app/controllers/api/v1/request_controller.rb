@@ -1,7 +1,7 @@
 module Api
   module V1
     class RequestController < ApplicationController
-    	@@permisos = {:grupoX => "QWhiPGn2Hnm54", :grupoY => "PnBiPHn2H4l5D", :grupoZ => "Gahi34n2H8mSj"}]
+    	@@permisos = {:grupo9 => "QWhiPGn2Hnm54", :grupoY => "PnBiPHn2H4l5D", :grupoZ => "Gahi34n2H8mSj"}]
       # POST /api/v1/pedirProducto
       def create
       	if params[:password] == permisos[params[:usuario]]

@@ -63,7 +63,7 @@ class Stock < ActiveRecord::Base
 			      	reason[prod[:sku]] = "No existe suficiente stock del producto"
 			      	if !prod.include?("api")
 			      	cantPedir = prod[:cant].to_i - stockPrincipal - stockRecepcion
-		    		pedirDespacho(user, almacenRecepcion_id, prod[:sku], cantPedir)
+		    		pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
 		    		end
 		    	  elsif stockPrincipal+stockRecepcion-others_reserv.to_i < prod[:cant].to_i
 		    	  	s["success"] = false
@@ -79,7 +79,7 @@ class Stock < ActiveRecord::Base
 		      	reason[prod[:sku]] = "No existe en bodega el producto" 
 		      	if !prod.include?("api")
 		      	cantPedir = prod[:cant].to_i
-		    	pedirDespacho(user, almacenRecepcion_id, prod[:sku], cantPedir) 
+		    	pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir) 
 		    	end 
 		    end 
 		    
@@ -148,8 +148,8 @@ class Stock < ActiveRecord::Base
 	end  
 
 
-	def self.pedirDespacho (user, almacen_id, sku, cantidad)
-
+	def self.pedirDespacho (almacen_id, sku, cantidad)
+		user = "grupo1"
 		password = "grupo1"
 		encryptedPassword = Digest::SHA1.hexdigest(password)
 
@@ -165,7 +165,18 @@ class Stock < ActiveRecord::Base
 			if !response.include?("error")
 				return response
 			else
-				return response["error"]
+				password = "KB74LrBL"
+				url = "http://integra9.ing.puc.cl/api/disponibles/grupo1/KB74LrBL/" + sku
+				response = HTTParty.get(url)
+				if response[:cantidad] < cantidad
+					url =  "http://integra9.ing.puc.cl/api/pedirProducto"
+					response = HTTParty.post(url,:body => { :usuario => user, :password => password, :almacenId => almacen_id, :SKU => sku, :cantidad => response[:cantidad] })
+					return response
+				else
+					url =  "http://integra9.ing.puc.cl/api/pedirProducto"
+					response = HTTParty.post(url,:body => { :usuario => user, :password => password, :almacenId => almacen_id, :SKU => sku, :cantidad => cantidad })
+					return response
+				end
 			end
 		end
 	
