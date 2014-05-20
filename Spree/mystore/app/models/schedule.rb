@@ -4,10 +4,10 @@ class Schedule < ActiveRecord::Base
 	require 'json'
 
 	def self.main
-
+		WebProduct.read
 		Sftp.orders
 		Sftp.csv
-		WebProduct.read
+		
 		#Esteban retorna true y queda listo
 		@ordenes = Order.all
 		producto = []
