@@ -54,6 +54,9 @@ class Stock < ActiveRecord::Base
 			      end
 
 			      espacioPedido += prod[:cant].to_i
+			      if !prod.include?("api")
+			      others_reserv = Gdoc.return_reservation(prod[:sku], prod[:clienteId])
+			  	  end
 
 			      if stockPrincipal+stockRecepcion < prod[:cant].to_i
 			      	s["success"] = false
@@ -62,7 +65,7 @@ class Stock < ActiveRecord::Base
 			      	cantPedir = prod[:cant].to_i - stockPrincipal - stockRecepcion
 		    		pedirDespacho(user, almacenRecepcion_id, prod[:sku], cantPedir)
 		    		end
-		    	  elsif stockPrincipal+stockRecepcion-prod[:others_reserv].to_i < prod[:cant].to_i
+		    	  elsif stockPrincipal+stockRecepcion-others_reserv.to_i < prod[:cant].to_i
 		    	  	s["success"] = false
 		    	  	reason[prod[:sku]] = "No existe stock disponible debido a reservas"
 			      elsif espacioPedido >  almacenDespacho_espacio
@@ -117,7 +120,7 @@ class Stock < ActiveRecord::Base
 		    	end 
 		    end	
 
-		    		    
+		    cant_movida = 0		    
 		    responseStockR.each do |prodUnidad|
 				
 				authorizationMovi = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "POST" + prodUnidad["_id"] + almacenDespacho_id))
@@ -125,12 +128,22 @@ class Stock < ActiveRecord::Base
 		  		if responseMovi.include?("error")
 			    	s["success"] = false
 			    	reason["error"] = responseMovi["error"]
+			    	if !prod.include?("api")
+					Gdoc.use_reservation(prod[:sku], prod[:clienteId], cant_movida)
+					end
 			    	return s, reason
+			    else
+			    	cant_movida += 1
 		    	end   
-		    end	
+		    end
+		    
+		    if !prod.include?("api")
+			Gdoc.use_reservation(prod[:sku], prod[:clienteId], prod[:cant])
+			end	
 
 		end   	
 		reason["resultado"] = "Existe stock y este fue movido a la Bodega de Despacho"
+
 		return s, reason
 	end  
 

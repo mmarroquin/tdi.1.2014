@@ -103,8 +103,8 @@ class Gdoc < ActiveRecord::Base
 
 	def self.use_reservation(sku, cliente_id, cant)
 		aux = Reservation.find(:last,:select => "amount, used", :conditions => ['date >= ? AND sku = ? AND client = ?', Date.current - 7.days, sku, cliente_id])
-		cant_disp = aux[:ammount] - aux[:used] 
-		if cant < cant_disp
+		cant_disp = aux[:ammount].to_i - aux[:used].to_i 
+		if cant.to_i < cant_disp
 		Reservation.update(:last, :used => cant + aux[:used], :conditions => ['date >= ? AND sku = ? AND client = ?', Date.current - 7.days, sku, cliente_id])
 		else
 		Reservation.delete_all(:conditions => ['client = ? AND sku = ?', cliente_id, sku ])	

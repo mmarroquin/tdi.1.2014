@@ -3,8 +3,8 @@ class Request < ActiveRecord::Base
 
 	def self.pedirProducto (almacenId, sku, cant)
 		cliente_id = ""
-		reserva_otros = Gdoc.return_reservation(sku, cliente_id)
-		aux = [{:sku => sku, :cant => cant, :reserv => reserva_otros.to_s, :api => true}]
+		
+		aux = [{:sku => sku, :cant => cant, :clienteId => cliente_id, :api => true}]
 		respuesta = Stock.getStock(aux)
 		if respuesta[:success]
 			return enviarABodega(aux, almacenId)
@@ -19,7 +19,6 @@ class Request < ActiveRecord::Base
 
 	def self.enviarABodega(productos, almacenId)
 		s["success"] = true
-		reason = Hash.new
 	    user = "grupo1"
 	    password = "OuyMG5aD"
 	    authorization = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET"))
@@ -45,7 +44,6 @@ class Request < ActiveRecord::Base
 		    		
 		    	if responseEnv.include?("error")
 			    	s["success"] = false
-			    	reason["error"] = responseEnv["error"]
 			    else
 			    	cantidadMov["cantMov"] += 1
 		    	end 
@@ -55,7 +53,7 @@ class Request < ActiveRecord::Base
 
 		end
 
-		return s, cantidadMov, reason
+		return s, cantidadMov
 				
 	end 
 
