@@ -171,7 +171,7 @@ class Stock < ActiveRecord::Base
 	
 	end
 
-	def self.despachar(productos, direccion, pedido_id)
+	def self.despachar(productos, direccion, pedidoId)
 		success = true
 		reason = Hash.new
 	    user = "grupo1"
