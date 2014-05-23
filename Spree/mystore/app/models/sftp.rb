@@ -59,8 +59,9 @@ class Sftp < ActiveRecord::Base
   	end
 
   	def self.csv
-  		wasGood = exec( "javac -d bin -sourcepath src -cp /home/administrator/commandsapp/src/commons-lang-2.6.jar:/home/administrator/commandsapp/src/commons-logging-1.1.3.jar:/home/administrator/commandsapp/src/jackcess-2.0.2.jar:/home/administrator/commandsapp/src/opencsv-2.3.jar /home/administrator/commandsapp/llamarRuby/src/principal/main.java")
-  		wasGood = exec( "java -cp bin:/home/administrator/commandsapp/src/commons-lang-2.6.jar:/home/administrator/commandsapp/src/commons-logging-1.1.3.jar:/home/administrator/commandsapp/src/jackcess-2.0.2.jar:/home/administrator/commandsapp/src/opencsv-2.3.jar principal.main" )
-  		return wasGood
+
+  		#wasGood = exec( "javac -d bin -sourcepath src -cp /home/administrator/commandsapp/src/commons-lang-2.6.jar:/home/administrator/commandsapp/src/commons-logging-1.1.3.jar:/home/administrator/commandsapp/src/jackcess-2.0.2.jar:/home/administrator/commandsapp/src/opencsv-2.3.jar /home/administrator/commandsapp/llamarRuby/src/principal/main.java")
+  		#wasGood = exec( "java -cp bin:/home/administrator/commandsapp/src/commons-lang-2.6.jar:/home/administrator/commandsapp/src/commons-logging-1.1.3.jar:/home/administrator/commandsapp/src/jackcess-2.0.2.jar:/home/administrator/commandsapp/src/opencsv-2.3.jar principal.main" )
+  		return Dir.pwd
   	end
 end
