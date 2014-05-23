@@ -77,7 +77,7 @@ class Gdoc < ActiveRecord::Base
 					
 				aux = Reservation.where(:date => Date.parse(@datee), :sku => n[0], :client => n[1], :amount => n[2], :used => auxi).first
 				if aux == nil
-					Reservation.delete_all(:conditions => ['NOT date = ? AND sku = ? AND client = ? AND amount = ? AND used = ?', @datee, n[0], n[1], n[2], n[3] ])	
+					#Reservation.delete_all(:conditions => ['NOT date = ? AND sku = ? AND client = ? AND amount = ? AND used = ?', @datee, n[0], n[1], n[2], n[3] ])	
 					Reservation.create(:date => @datee, :sku => n[0], :client => n[1], :amount => n[2], :used => n[3])
 				end
 			rescue
