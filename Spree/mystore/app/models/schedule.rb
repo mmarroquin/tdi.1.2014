@@ -29,7 +29,7 @@ class Schedule < ActiveRecord::Base
 		
 
 		#Order.id_order = FileOrder.no_order
-		@archivos = FileOrders.all
+		@archivos = FileOrder.all
 		@archivos.each do |file|
 			producto = {}
 			despacho = false
