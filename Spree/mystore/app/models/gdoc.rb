@@ -107,7 +107,7 @@ class Gdoc < ActiveRecord::Base
 		if cant.to_i < cant_disp
 		Reservation.update(:last, :used => cant + aux[:used], :conditions => ['date >= ? AND sku = ? AND client = ?', Date.current - 7.days, sku, cliente_id])
 		else
-		Reservation.delete_all(:conditions => ['client = ? AND sku = ?', cliente_id, sku ])	
+		#Reservation.delete_all(:conditions => ['client = ? AND sku = ?', cliente_id, sku ])	
 		end	
 	end
 end
