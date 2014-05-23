@@ -4,31 +4,55 @@ class Schedule < ActiveRecord::Base
 	require 'json'
 
 	def self.main
-		WebProduct.read
+		
 		Sftp.orders
-		Sftp.csv
+		
+		#Ejecutar precios una vez a la semana
+		#Sftp.csv
 		
 		#Esteban retorna true y queda listo
-		@ordenes = Order.all
-		producto = []
-		@ordenes.each do |orden|
-			p = FileOrder.where(:no_order => orden.id_order).first()
-			producto << {:sku => orden.sku_order, :cant => orden.quantity, :clienteId => p.rut}
+		#@ordenes = Order.all
+		#producto = []
+		#@ordenes.each do |orden|
+		#	p = FileOrder.where(:no_order => orden.id_order).first()
+		#	producto << {:sku => orden.sku_order, :cant => orden.quantity, :clienteId => p.rut}
+		#end
 
-			if Stock.getStock(producto)
-				direccion = Schedule.crm(p.rut, p.direcc_id)
-				Product.readcsv
+		#if Stock.getStock(producto)
+		#	direccion = Schedule.crm(p.rut, p.direcc_id)
+		#	Product.readcsv
 
-				despacho  = Stock.despachar(producto, direccion, p.no_order)
+		#	despacho  = Stock.despachar(producto, direccion, p.no_order)
 
-				Report.create(:n_pedido =>p.no_order, :despachado =>despacho, :fecha =>  p.date)
+		#	Report.create(:n_pedido =>p.no_order, :despachado =>despacho, :fecha =>  p.date)
+		#end
+		
+
+		#Order.id_order = FileOrder.no_order
+		@archivos = FileOrders.all
+		@archivos.each do |file|
+			producto = {}
+			despacho = false
+			hay_stock = false
+			@orders = Order.where(:id_order => file.no_order)
+			@orders.each do |orden|
+				producto << {:sku => orden.sku_order, :cant => orden.quantity, :clienteId => file.rut}
 			end
+			if producto.length > 0
+				hay_stock = Stock.getStock(producto)
+
+				if hay_stock
+					direccion = Schedule.crm(file.rut, file.direcc_id)
+					despacho = Stock.despachar(producto, direccion, file.no_order)
+				end
+			end
+
+			Report.create(:n_pedido => file.no_order, :despachado => despacho, :quiebre => hay_stock, :fecha => file.no_order)
 		end
 		
-		
 
 
-		return Stock.getStock(producto)
+		#return Stock.getStock(producto)
 		#producto =  [{:sku = "302393", :cant = "15", :clienteId = "17356486-4"}, {:sku = "354342", :cant = "20", :clienteId = "13645768-5"}]
 		#Pregunto vale precio
 		#pregunto esteban1 direccion
