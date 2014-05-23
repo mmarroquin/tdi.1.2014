@@ -2,7 +2,7 @@ class Product < ActiveRecord::Base
 
 	def self.readcsv
 		@errors = []
-	    filename = '/home/administrator/commandsapp/llamarRuby/outputJava.csv'
+	    filename = '/home/administrator/tdi.1.2014/Spree/mystore/outputJava.csv'
 	    file = File.new(filename, 'r')
 	    file.each_line("\n") do |row|
 	      columns = row.split(',')
