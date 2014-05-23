@@ -84,3 +84,5 @@ gem 'json'
 
 gem 'net-sftp'
 gem 'net-ssh'
+
+gem 'httparty'

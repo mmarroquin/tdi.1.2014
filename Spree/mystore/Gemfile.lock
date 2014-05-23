@@ -330,6 +330,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   google_drive!
   highline (>= 1.5.1)
+  httparty
   jbuilder (~> 1.2)
   jquery-rails
   json
