@@ -31,7 +31,7 @@ class Schedule < ActiveRecord::Base
 		#Order.id_order = FileOrder.no_order
 		@archivos = FileOrder.all
 		@archivos.each do |file|
-			producto = {}
+			producto = []
 			despacho = false
 			hay_stock = false
 			@orders = Order.where(:id_order => file.no_order)
