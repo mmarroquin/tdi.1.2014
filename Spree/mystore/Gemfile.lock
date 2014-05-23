@@ -332,6 +332,7 @@ DEPENDENCIES
   highline (>= 1.5.1)
   jbuilder (~> 1.2)
   jquery-rails
+  json
   money (= 6.0.1)
   net-sftp
   net-ssh

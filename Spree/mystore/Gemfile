@@ -80,6 +80,7 @@ gem "highline", ">= 1.5.1", :group => :test
 
 
 gem 'rest-client'
+gem 'json'
 
 gem 'net-sftp'
 gem 'net-ssh'

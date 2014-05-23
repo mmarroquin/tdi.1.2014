@@ -87,7 +87,7 @@ class Schedule < ActiveRecord::Base
 	#Aca ya se tiene una conexion a vTiger y se procede a obtener la empresa con el rut del input.
 
 		#Se define la query a la tabla de empresas (accounts).
-		@query="select * from Accounts where cf_705="+@rut_empresa+";"
+		@query="select * from Accounts where cf_705='"+@rut_empresa+"';"
 	    @queryParam = URI::encode(@query)
 	    @sessionId=JSON.parse(login.body)['result']['sessionName']
 		#use sessionId created at the time of login.
@@ -96,6 +96,7 @@ class Schedule < ActiveRecord::Base
 		
 		path_query = @endpointUrl+@params
 		resultado =RestClient.get path_query
+
 		@id_empresa=JSON.parse(resultado.body)['result'][0]['id']
 		@b0=resultado.body
 		@nombre_empresa=JSON.parse(resultado.body)['result'][0]['accountname']
@@ -115,7 +116,6 @@ class Schedule < ActiveRecord::Base
 	#Aca se procede a obtener la direccion del empleado de la empresa obtenida
 		#Se define el query para obtener el empleado correspondiente
 		@query="select * from Contacts where account_id="+@id_empresa+" and cf_707='"+@input_id+"';"
-
 	    @queryParam = URI::encode(@query)
 	    @sessionId=JSON.parse(login.body)['result']['sessionName']
 	    @b1=login.body
@@ -138,7 +138,11 @@ class Schedule < ActiveRecord::Base
 		@region_empleado=JSON.parse(resultado2.body)['result'][0]['otherstate']
 		@message2="..."+resultado2+"..."+@sessionId
 
+
+
+
 		@resultado = @empleado_street +","+ @comuna_empleado +","+ @region_empleado
+
 
 
 		return @resultado
