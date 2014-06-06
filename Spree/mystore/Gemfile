@@ -83,3 +83,4 @@ gem 'rest-client'
 
 gem 'net-sftp'
 gem 'net-ssh'
+gem 'twitter'
