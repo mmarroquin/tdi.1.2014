@@ -7,7 +7,7 @@ class Product < ActiveRecord::Base
 	    file.each_line("\n") do |row|
 	      columns = row.split(',')
 	      begin
-	        aux = Product.where(:sku=>columns[1], :price=>columns[2], :start_date=>columns[3], :final_date=>columns[4]).first
+	        aux = Product.where(:sku=>columns[1], :price=>columns[2], :start_date=>columns[3], :final_date=>columns[4]).last
 	        if aux == nil
 	          Product.create(:sku=>columns[1], :price=>columns[2], :start_date=>columns[3], :final_date=>columns[4])
 	        end
