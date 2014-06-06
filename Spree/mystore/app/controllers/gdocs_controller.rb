@@ -7,7 +7,6 @@ class GdocsController < ApplicationController
     @gdocs = Gdoc.all
     @datee = Gdoc.obtain_date
     @rowss = Gdoc.obtain_rows
-    @test = Gdoc.use_reservation("3548644", "6833961-8", "20")
 
 #    @filas.each do |n|
 #      ProductosNuevos.create(:SKU => n[0], :cliente => n[1], :cantidad => n[2], :utilizado => n[3])
