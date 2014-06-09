@@ -41,10 +41,10 @@ class Schedule < ActiveRecord::Base
 			if producto.length > 0
 				#hay_stock = Stock.getStock(producto)
 				hay_stock = true
-				
+
 				if hay_stock
 					direccion = Schedule.crm(file.rut, file.direcc_id)
-					despacho = Stock.despachar(producto, direccion, file.no_order)
+					despacho[0] = Stock.despachar(producto, direccion, file.no_order)
 				end
 			end
 
