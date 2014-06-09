@@ -201,6 +201,10 @@ class Stock < ActiveRecord::Base
 	    cantidadesMov = Hash.new
 	    productos.each do |prod| 
 
+	    	price_prod = Product.last(:select => "products.price", :conditions => ['start_date <= ? AND final_date >= ? AND sku = ?', Date.current, Date.current, prod[:sku] ])
+		    if price_prod == nil
+		    	price_prod = WebProduct.last(:select => "webproducts.price_normal", :conditions => ['sku = ?', prod[:sku] ])
+		    end
 		    cantidadProd = prod[:cant].to_i
 		    if responseDespacho.find { |producto| producto['_id'] == prod[:sku] }
 				url = "http://bodega-integracion-2014.herokuapp.com/stock"
@@ -210,8 +214,8 @@ class Stock < ActiveRecord::Base
 		    	prod["cant_mov"] = 0
 		    
 		    	responseStockD.each do |prodUnidad|
-					authorizationEnv = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "DELETE" + prodUnidad["_id"] + direccion + prod[:precio] + pedido_id))
-		    		responseEnv = HTTParty.delete(url,:body => { :productoId => prodUnidad["_id"], :direccion => direccion, :precio => prod[:precio], :pedidoId => pedido_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationEnv})
+					authorizationEnv = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "DELETE" + prodUnidad["_id"] + direccion + price_prod + pedido_id))
+		    		responseEnv = HTTParty.delete(url,:body => { :productoId => prodUnidad["_id"], :direccion => direccion, :precio => price_prod, :pedidoId => pedido_id },:headers => { "Authorization" => "UC "+ user + ":" + authorizationEnv})
 		    		
 		    		if responseEnv.include?("error")
 			    		success = false

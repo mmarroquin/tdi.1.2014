@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 20140606192710) do
     t.date     "date"
     t.string   "client"
     t.integer  "amount"
-    t.boolean  "used"
+    t.integer  "used"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

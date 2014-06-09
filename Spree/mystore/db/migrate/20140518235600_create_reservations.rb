@@ -5,7 +5,7 @@ class CreateReservations < ActiveRecord::Migration
       t.date :date
       t.string :client
       t.integer :amount
-      t.boolean :used
+      t.integer :used
 
       t.timestamps
     end

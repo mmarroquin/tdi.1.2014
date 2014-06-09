@@ -12,7 +12,7 @@ class WebProduct < ActiveRecord::Base
 				cat += c + ','
 			end
   			begin
-        		prod = WebProduct.where(:sku=>aux['sku'], :description=>aux['descripcion'], :price_normal=>aux['precio']['normal'], :price_internet=>aux['precio']['internet'], :category=>cat, :img=>aux['imagen'],:model=>aux['modelo'], :brand=>aux['marca']).first
+        		prod = WebProduct.where(:sku=>aux['sku'], :description=>aux['descripcion'], :price_normal=>aux['precio']['normal'], :price_internet=>aux['precio']['internet'], :category=>cat, :img=>aux['imagen'],:model=>aux['modelo'], :brand=>aux['marca']).last
         		if prod == nil
           			WebProduct.create(:sku=>aux['sku'], :description=>aux['descripcion'], :price_normal=>aux['precio']['normal'], :price_internet=>aux['precio']['internet'], :category=>cat, :img=>aux['imagen'],:model=>aux['modelo'], :brand=>aux['marca'])
         		end
