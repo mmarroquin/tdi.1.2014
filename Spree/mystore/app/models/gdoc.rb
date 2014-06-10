@@ -69,16 +69,17 @@ class Gdoc < ActiveRecord::Base
 
 		@rows.each do |n|
 			begin
-				if n[3] == ''
-					auxi = nil
-				else
-					auxi = n[3]
-				end
 					
-				aux = Reservation.where(:date => Date.parse(@datee), :sku => n[0], :client => n[1], :amount => n[2], :used => auxi).first
+				aux = Reservation.where(:date => Date.parse(@datee), :sku => n[0], :client => n[1], :amount => n[2]).last
 				if aux == nil
-					#Reservation.delete_all(:conditions => ['NOT date = ? AND sku = ? AND client = ? AND amount = ? AND used = ?', @datee, n[0], n[1], n[2], n[3] ])	
-					Reservation.create(:date => @datee, :sku => n[0], :client => n[1], :amount => n[2], :used => n[3])
+					aux = Reservation.last(:select => "reservations.used", :conditions => ['date >= ? AND sku = ? AND client = ?', Date.current - 7.days, n[0], n[1] ])
+					if aux == nil
+						#Reservation.delete_all(['sku = ? AND client = ?', n[0], n[1] ])
+						Reservation.create(:date => Date.parse(@datee), :sku => n[0], :client => n[1], :amount => n[2], :used => '0')
+						
+					else
+						Reservation.update_all({:date => Date.parse(@datee), :sku => n[0], :client => n[1], :amount => n[2], :used => aux[:used]}, ['sku = ? AND client = ?', sku, cliente_id])
+					end
 				end
 			rescue
 				#dosomething
@@ -89,7 +90,7 @@ class Gdoc < ActiveRecord::Base
 
 	def self.return_reservation(sku, cliente_id)
 		others_reservation_cant = 0
-		aux = Reservation.find(:all,:select => "amount, used", :conditions => ['date >= ? AND sku = ? AND NOT client = ?', Date.current - 7.days, sku, cliente_id])
+		aux = Reservation.find(:all,:select => "reservations.amount, reservations.used", :conditions => ['date >= ? AND sku = ? AND NOT client = ?', Date.current - 7.days, sku, cliente_id])
 		if aux == nil
 			return 0
 		else
@@ -102,12 +103,13 @@ class Gdoc < ActiveRecord::Base
 	end
 
 	def self.use_reservation(sku, cliente_id, cant)
-		aux = Reservation.find(:last,:select => "amount, used", :conditions => ['date >= ? AND sku = ? AND client = ?', Date.current - 7.days, sku, cliente_id])
-		cant_disp = aux[:ammount].to_i - aux[:used].to_i 
+		aux = Reservation.last(:select => "reservations.amount, reservations.used", :conditions => ['date >= ? AND sku = ? AND client = ?', Date.current - 7.days, sku, cliente_id])
+		cant_disp = aux[:amount].to_i - aux[:used].to_i 
 		if cant.to_i < cant_disp
-		Reservation.update(:last, :used => cant + aux[:used], :conditions => ['date >= ? AND sku = ? AND client = ?', Date.current - 7.days, sku, cliente_id])
+		used_aux = cant.to_i + aux[:used].to_i
+		Reservation.update_all({:used => used_aux}, ['date >= ? AND sku = ? AND client = ?', Date.current - 7.days, sku, cliente_id])
 		else
-		#Reservation.delete_all(:conditions => ['client = ? AND sku = ?', cliente_id, sku ])	
+		Reservation.update_all({:used => aux[:amount]}, ['date >= ? AND sku = ? AND client = ?', Date.current - 7.days, sku, cliente_id])	
 		end	
 	end
 end
