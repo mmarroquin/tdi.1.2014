@@ -3,7 +3,7 @@ Mystore::Application.routes.draw do
 
   resources :dashboards
 
-  root 'reports#index'
+  #root 'reports#index'
   resources :reports
 
   namespace :api, defaults: {format: 'json'} do
