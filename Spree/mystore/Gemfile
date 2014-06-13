@@ -88,3 +88,5 @@ gem 'net-ssh'
 gem 'httparty'
 
 gem 'bunny'
+
+gem 'googlecharts'

@@ -17,9 +17,8 @@ class Rabbitmpq < ActiveRecord::Base
 
 		msg = q.pop # get message from the queue
 
-		puts msg
 
-		 # close the connection
+		# close the connection
 	end
 
 	def self.connect

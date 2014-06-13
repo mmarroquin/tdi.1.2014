@@ -1,6 +1,8 @@
 Mystore::Application.routes.draw do
 
 
+  resources :dashboards
+
   root 'reports#index'
   resources :reports
 
