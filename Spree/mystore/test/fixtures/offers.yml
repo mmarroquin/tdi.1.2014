@@ -3,11 +3,13 @@
 one:
   sku: MyString
   precio: MyString
-  inicio: 2014-06-19
-  fin: 2014-06-19
+  inicio: 2014-06-20
+  fin: 2014-06-20
+  fuePublicado: false
 
 two:
   sku: MyString
   precio: MyString
-  inicio: 2014-06-19
-  fin: 2014-06-19
+  inicio: 2014-06-20
+  fin: 2014-06-20
+  fuePublicado: false

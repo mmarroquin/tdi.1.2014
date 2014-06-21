@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140619201854) do
+ActiveRecord::Schema.define(version: 20140621182302) do
 
   create_table "dashboards", force: true do |t|
     t.datetime "created_at"
@@ -35,16 +35,9 @@ ActiveRecord::Schema.define(version: 20140619201854) do
   create_table "offers", force: true do |t|
     t.string   "sku"
     t.string   "precio"
-    t.date     "inicio"
-    t.date     "fin"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "orders", force: true do |t|
-    t.string   "id_order"
-    t.string   "sku_order"
-    t.string   "quantity"
+    t.datetime "inicio"
+    t.datetime "fin"
+    t.boolean  "fuePublicado"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -845,7 +838,7 @@ ActiveRecord::Schema.define(version: 20140619201854) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "brand"
-    t.string   "model"
+    t.string   "name"
   end
 
 end
