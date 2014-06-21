@@ -6,6 +6,7 @@ class DashboardsController < ApplicationController
   def index
     @dashboards = Dashboard.all
     @graph = Dashboard.plot
+    @graph2 = Dashboard.info
   end
 
   # GET /dashboards/1
