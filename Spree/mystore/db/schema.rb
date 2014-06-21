@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 20140613183027) do
     t.date     "date"
     t.string   "client"
     t.integer  "amount"
-    t.boolean  "used"
+    t.integer  "used"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -821,6 +821,11 @@ ActiveRecord::Schema.define(version: 20140613183027) do
     t.string   "description"
     t.boolean  "default_tax",        default: false
     t.integer  "zone_members_count", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tweets", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
