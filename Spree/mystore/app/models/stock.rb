@@ -130,6 +130,7 @@ class Stock < ActiveRecord::Base
     	warehouses << Warehouse9_api.new
     	warehouses << Warehouse4_api.new
     	warehouses << Warehouse5_api.new
+    	warehouses << Warehouse8_api.new
 
     	warehouses.shuffle!
 
