@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140621182302) do
+ActiveRecord::Schema.define(version: 20140622011447) do
 
   create_table "dashboards", force: true do |t|
     t.datetime "created_at"
@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 20140621182302) do
     t.boolean  "fuePublicado"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "precioBase"
+    t.boolean  "TienePrecioBase"
   end
 
   create_table "products", force: true do |t|
@@ -61,6 +63,15 @@ ActiveRecord::Schema.define(version: 20140621182302) do
     t.string   "despachado"
     t.string   "quiebre"
     t.string   "fecha"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "reposicions", force: true do |t|
+    t.string   "sku"
+    t.datetime "fecha"
+    t.string   "almacenId"
+    t.boolean  "fueRepuesto"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
