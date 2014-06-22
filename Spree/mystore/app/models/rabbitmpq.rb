@@ -19,7 +19,6 @@ class Rabbitmpq < ActiveRecord::Base
 		q = ch.queue("reposicion",:auto_delete=>true)
 		while q.message_count>2000
 			content1 = q.pop do |delivery_info, properties, body|
-				puts body
 				repos = JSON.parse(body)
 				Reposicion.create(:sku=>repos['sku'], :almacenId=>repos['almacenId'], :fecha=>DateTime.strptime((repos["fecha"]/1000).to_s,"%s"), :fueRepuesto =>false)
 			end
@@ -35,7 +34,6 @@ class Rabbitmpq < ActiveRecord::Base
 		q = ch.queue("ofertas",:auto_delete=>true)
 		while q.message_count>90
 			content1 = q.pop do |delivery_info, properties, body|
-				puts body
 				oferta = JSON.parse(body)
 				Offer.create(:sku=>oferta['sku'], :precio=>oferta['precio'], :inicio=>DateTime.strptime((oferta["inicio"]/1000).to_s,"%s"), :fin=>DateTime.strptime((oferta["fin"]/1000).to_s,"%s"), :fuePublicado=>false, :TienePrecioBase=>true)
 			end

@@ -5,30 +5,6 @@ class Schedule < ActiveRecord::Base
 
 	def self.main
 		
-		Sftp.orders
-		
-		#Ejecutar precios una vez a la semana
-		#Sftp.csv
-		
-		#Esteban retorna true y queda listo
-		#@ordenes = Order.all
-		#producto = []
-		#@ordenes.each do |orden|
-		#	p = FileOrder.where(:no_order => orden.id_order).first()
-		#	producto << {:sku => orden.sku_order, :cant => orden.quantity, :clienteId => p.rut}
-		#end
-
-		#if Stock.getStock(producto)
-		#	direccion = Schedule.crm(p.rut, p.direcc_id)
-		#	Product.readcsv
-
-		#	despacho  = Stock.despachar(producto, direccion, p.no_order)
-
-		#	Report.create(:n_pedido =>p.no_order, :despachado =>despacho, :fecha =>  p.date)
-		#end
-		
-
-		#Order.id_order = FileOrder.no_order
 		@archivos = FileOrder.all
 		@archivos.each do |file|
 			producto = []
@@ -51,13 +27,11 @@ class Schedule < ActiveRecord::Base
 			Report.create(:n_pedido => file.no_order, :despachado => despacho, :quiebre => hay_stock, :fecha => file.no_order)
 		end
 		
+	end
 
-
-		#return Stock.getStock(producto)
-		#producto =  [{:sku = "302393", :cant = "15", :clienteId = "17356486-4"}, {:sku = "354342", :cant = "20", :clienteId = "13645768-5"}]
-		#Pregunto vale precio
-		#pregunto esteban1 direccion
-		#Despacho a esteban2
+	def self.new_orders
+		#Revisar nuevos pedidos desde FTP - Ingresar nuevos pedidos
+		Sftp.orders
 	end
 
 	def self.crm(rut, direc)

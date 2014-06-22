@@ -8,7 +8,7 @@ class Offer < ActiveRecord::Base
 				producto = WebProduct.where(:sku=>oferta.sku).last
 				nombre = producto.name
 				precio = oferta.precio
-				mensaje = "Nueva oferta en Central Ahorro!!! " + nombre + "a sólo $" + precio + " válido hasta el " + oferta.fin.strftime("%x") + " bit.ly/1uPHoPN"
+				mensaje = "Oferta! " + nombre + " a sólo $" + precio + " válido hasta el " + oferta.fin.strftime("%x") + " bit.ly/1uPHoPN"
 				Tweet.publish(mensaje)
 				Offer.where(:sku=>oferta.sku).last.update_attributes(:fuePublicado=>true)
 				precioB = producto.price_internet
@@ -20,31 +20,9 @@ class Offer < ActiveRecord::Base
 	end
 
 	def self.segundo_antes_primero(ahora, inicio)
-		if ahora.year > inicio.year
-			return true
-		else
-			if ahora.month > inicio.month
-				return true
-			else
-				if ahora.day > inicio.day
-					return true
-				else
-					if ahora.hour > inicio.hour
-						return true
-					else
-						if ahora.min > inicio.min
-							return true
-						else
-							if ahora.sec > inicio.sec
-								return true
-							end
-						end
-					end
-				end
-			end
-		end
-
-		return false
+		a =ahora.to_i
+		i= inicio.to_i
+		return (a>i)
 	end
 
 	def self.cambiarPrecio
