@@ -41,7 +41,7 @@ class Gdoc < ActiveRecord::Base
 		session = GoogleDrive.login("tallerdi.1.2014@gmail.com", "tdi12014")
 
 		# First worksheet of
-		# https://docs.google.com/spreadsheet/ccc?key=pz7XtlQC-PYx-jrVMJErTcg
+		# https://docs.google.com/spreadsheet/ccc?key=0As9H3pQDLg79dHRzMG5US21Tem4wRk05c2ZtVnkxbnc
 		ws = session.spreadsheet_by_key("0As9H3pQDLg79dHRzMG5US21Tem4wRk05c2ZtVnkxbnc").worksheets[0]
 
 		return ws[2, 2]
@@ -90,7 +90,7 @@ class Gdoc < ActiveRecord::Base
 
 	def self.return_reservation(sku, cliente_id)
 		others_reservation_cant = 0
-		aux = Reservation.find(:all,:select => "reservations.amount, reservations.used", :conditions => ['date >= ? AND sku = ? AND NOT client = ?', Date.current - 7.days, sku, cliente_id])
+		aux = Reservation.all(:select => "reservations.amount, reservations.used", :conditions => ['date >= ? AND sku = ? AND NOT client = ?', Date.current - 7.days, sku, cliente_id])
 		if aux == nil
 			return 0
 		else

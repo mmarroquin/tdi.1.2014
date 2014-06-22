@@ -4,6 +4,7 @@ class CreateOrders < ActiveRecord::Migration
       t.string :id_order
       t.string :sku_order
       t.string :quantity
+      t.boolean :delivered
 
       t.timestamps
     end

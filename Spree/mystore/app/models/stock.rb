@@ -275,7 +275,7 @@ class Stock < ActiveRecord::Base
 	    url = "http://bodega-integracion-2014.herokuapp.com/stock"
 		authorizationStock = Base64.encode64(OpenSSL::HMAC.digest('sha1', $password, "GET" + origen + sku))
 		responseStock = HTTParty.get(url,:query => { :almacenId => origen, :sku => sku, :limit => limit},:headers => { "Authorization" => "UC "+ $user + ":" + authorizationStock})
-
+		
 		responseStock.each do |prodUnidad|
 			if error = movStockUn(destino, prodUnidad["_id"])
 				cantidadesMov[:error] = error

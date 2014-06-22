@@ -8,14 +8,12 @@ class Warehouse9_api
   $password = "KB74LrBL"
 
   def get_prod(sku, cantidad, almacen_id)
-  	url = "http://integra9.ing.puc.cl/api/disponibles/#{$user}/#{$password}/" + sku
-	response1 = HTTParty.get(url)
-	url =  "http://integra9.ing.puc.cl/api/pedirProducto/#{$user}/#{$password}/" + sku
+	response1 = requestStock(sku)
 	if response1["status"] == 200
 		if response1["response"]["cantidad"] < cantidad
-			response2 = HTTParty.post(url,:body => { :almacenId => almacen_id, :cantidad => response1["response"]["cantidad"] })
+			response2 = requestMov(sku, response1["response"]["cantidad"], almacen_id)
 		else
-			response2 = HTTParty.post(url,:body => { :almacenId => almacen_id, :cantidad => cantidad })
+			response2 = requestMov(sku, cantidad, almacen_id)
 		end
 
 		if response2["status"] == 200
@@ -26,6 +24,16 @@ class Warehouse9_api
 	else
 		return -1
 	end
+  end
+
+  def requestStock(sku)
+  	url = "http://integra9.ing.puc.cl/api/disponibles/#{$user}/#{$password}/" + sku
+	return HTTParty.get(url)
+  end
+
+  def requestMov(sku, cantidad, almacen_id)
+  	url =  "http://integra9.ing.puc.cl/api/pedirProducto/#{$user}/#{$password}/" + sku
+	return HTTParty.post(url,:body => { :almacenId => almacen_id, :cantidad => cantidad })
   end
 
 end
