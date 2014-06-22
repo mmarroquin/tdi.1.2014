@@ -19,7 +19,7 @@ class Request < ActiveRecord::Base
 	def self.enviarABodega(almacenId, sku, cant)
 		reason = Hash.new
 		reason[:success] = true
-		reason[:message] = "Se envió todo"
+		reason[:message] = "Se envio todo"
 		reason[:sku] = sku
 
 	    depots = Stock.getDepots
