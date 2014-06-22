@@ -165,6 +165,9 @@ class Stock < ActiveRecord::Base
 	    	price_prod = Product.last(:select => "products.price", :conditions => ['start_date <= ? AND final_date >= ? AND sku = ?', Date.current, Date.current, prod[:sku] ])
 		    if price_prod == nil
 		    	price_prod = WebProduct.last(:select => "web_products.price_normal", :conditions => ['sku = ?', prod[:sku] ])
+		    	if price_prod ==nil
+		    		price_prod = 0
+		    	end
 		    end
 		    cantidadProd = prod[:cant].to_i
 		    if responseEspera.find { |producto| producto['_id'] == prod[:sku] }
