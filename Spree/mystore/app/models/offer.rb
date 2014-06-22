@@ -8,7 +8,7 @@ class Offer < ActiveRecord::Base
 				producto = WebProduct.where(:sku=>oferta.sku).last
 				nombre = producto.name
 				precio = oferta.precio
-				mensaje = "Nueva oferta en Central Ahorro!!! " + nombre + "a sólo $" + precio + " válido hasta el " + oferta.fin.strftime("%x") + " bit.ly/1uPHoPN"
+				mensaje = "Oferta! " + nombre + " a sólo $" + precio + " válido hasta el " + oferta.fin.strftime("%x") + " bit.ly/1uPHoPN"
 				Tweet.publish(mensaje)
 				Offer.where(:sku=>oferta.sku).last.update_attributes(:fuePublicado=>true)
 				precioB = producto.price_internet
