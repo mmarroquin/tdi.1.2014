@@ -84,10 +84,18 @@ class Stock < ActiveRecord::Base
 
 		end
 
-		if !reason[:success]
-			return reason
-		end
-		
+		return reason
+	end	
+	
+	def self.prepareStock(productos)
+
+		reason = Hash.new
+		reason[:success] = true
+
+		depots = getDepots
+	    almacenPrincipal_id = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first["_id"]
+	    almacenEspera_id = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.last["_id"]
+
 		productos.each do |prod|
 			cantidadProd = prod[:cant].to_i
 			cantProdPrincipal = 0
@@ -103,12 +111,12 @@ class Stock < ActiveRecord::Base
 			resultP = movStockSku(almacenPrincipal_id, almacenEspera_id, prod[:sku], cantProdPrincipal)
 			resultR = movStockSku(almacenRecepcion_id, almacenEspera_id, prod[:sku], cantProdRecepcion)
 			
-			if resultP.include?("error")
+			if resultP.include?(:error)
 				reason[:success] = false
-			    reason[:error] = resultP["error"]
-			elsif resultR.include?("error")
+			    reason[:error] = resultP[:error]
+			elsif resultR.include?(:error)
 				reason[:success] = false
-			    reason[:error] = resultR["error"]
+			    reason[:error] = resultR[:error]
 			end
 
 			if !prod.include?(:api)
@@ -116,7 +124,7 @@ class Stock < ActiveRecord::Base
 			end
 
 		end   	
-		reason[:resultado] = "Existe stock y este fue movido a la Bodega de Espera"
+		reason[:resultado] = "El stock esta listo y fue movido a la Bodega de Espera"
 
 		return reason
 	end  

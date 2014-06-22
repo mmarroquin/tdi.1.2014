@@ -23,14 +23,13 @@ class Request < ActiveRecord::Base
 		reason[:sku] = sku
 
 	    depots = Stock.getDepots
-	    
-	    almacenPrincipal_id = depots.first { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}["_id"]
-	    almacenEspera_id = depots.last { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}["_id"]
-	    response = Stock.movStockSku(almacenEspera_id, almacenId, sku, cant)
+	    almacenPrincipal_id = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first["_id"]
+	  
+	    response = Stock.movStockSku(almacenPrincipal_id, almacenId, sku, cant)
 	    if response.include?(:error)
 	    	reason[:success] = false
 	    	reason[:message] = "No se pudo enviar todo"
-	    	Stock.movStockSku(almacenEspera_id, almacenPrincipal_id, sku, cant-response[:cant_mov])
+	    	#Stock.movStockSku(almacenEspera_id, almacenPrincipal_id, sku, cant-response[:cant_mov])
 	    end
 	    reason[:amountSent] = response[:cant_mov]
 	    return reason
