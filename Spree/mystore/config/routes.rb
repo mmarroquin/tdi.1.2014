@@ -6,8 +6,8 @@ Mystore::Application.routes.draw do
   #root 'reports#index'
   resources :reports
 
-  namespace :api do
-    api_version(:module => "v1", :path => {:value => "v1"}) do
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
       match '/pedirProducto' => 'request#create', via: :post
     end
   end
