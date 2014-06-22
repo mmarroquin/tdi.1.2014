@@ -99,4 +99,4 @@ gem 'moped'
 gem 'bson'
 gem 'bson_ext'
 
-gem 'versionist'
+#gem 'versionist'
