@@ -11,7 +11,7 @@ class Offer < ActiveRecord::Base
 					nombre = nombre [0,50] + "..."
 				end
 				precio = oferta.precio
-				mensaje = "#ofertagrupo1 Oferta! " + nombre + " a sólo $" + precio + " válido hasta el " + oferta.fin.strftime("%x") + " bit.ly/1uPHoPN"
+				mensaje = "#ofertagrupo1 Oferta! " + nombre + " a solo S" + precio + " valido hasta el " + oferta.fin.strftime("%x") + " bit.ly/1uPHoPN"
 				puts mensaje.length
 				Tweet.publish(mensaje)
 				Offer.where(:sku=>oferta.sku).last.update_attributes(:fuePublicado=>true)
