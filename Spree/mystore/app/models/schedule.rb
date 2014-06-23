@@ -2,7 +2,7 @@ class Schedule < ActiveRecord::Base
 	
 
 	def self.main
-		
+		begin
 		@ordenesAProcesar = FileOrder.where(:processed => false)
 		@ordenesAProcesar.each do |file|
 			producto = []
@@ -37,9 +37,14 @@ class Schedule < ActiveRecord::Base
 
 			#Report.create(:n_pedido => file.no_order, :despachado => despacho, :quiebre => hay_stock, :fecha => file.no_order)
 		end
+		return "Proceso de pedidos correcto"
+		rescue
+			return "Error en el método"
+		end
 	end
 
 	def self.delivery
+		begin
 		@ordenesADespachar = FileOrder.all(:conditions => ['processed = ? AND dilevered = ? AND deliveryDate <= ?', true, false, Date.current])
 		#FileOrder.where(:processed => true, :success => true, :delivered => false, :deliveryDate )
 		@ordenesADespachar.each do |file|
@@ -63,25 +68,49 @@ class Schedule < ActiveRecord::Base
 				FileOrder.update(:delivered => true)
 			end
 		end
+		return "Delivery correcto"
+		rescue
+			return "Error en el método"
+		end
 	end
 
 	def self.new_orders
 		#Revisar nuevos pedidos desde FTP - Ingresar nuevos pedidos
+		begin
 		Sftp.orders
+		return "Revisión correcta"
+		rescue
+			return "Error en el método"
+		end
 	end
 
 	def self.new_reservations
 		#Revisar nuevas reservas desde Google Spreadsheet - Ingresar/Actualizar nuevas reservas
+		begin
 		Gdoc.obtain_info
+		return "Revisión correcta"
+		rescue
+			return "Error en el método"
+		end
 	end
 
 	def self.new_pricing
 		#Revisar nuevos precios desde Access - Ingresar/Actualizar nuevos precios
+		begin
 		Product.readcsv
+		return "Revisión correcta"
+		rescue
+			return "Error en el método"
+		end
 	end
 
 	def self.new_product
 		#Revisar nuevos productos desde archivo Json - Ingresar/Actualizar nuevos productos
+		begin
 		WebProduct.read
+		return "Revisión correcta"
+		rescue
+			return "Error en el método"
+		end
 	end
 end
