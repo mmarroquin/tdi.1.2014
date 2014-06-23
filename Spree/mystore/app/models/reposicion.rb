@@ -6,10 +6,10 @@ class Reposicion < ActiveRecord::Base
 		rep.each do |repos|
 			if segundo_antes_primero(fActual,repos.fecha)
 				almacen =repos.almacenId
-				sku = repos.sku
+				sku = repos.sku.to_s
 				id=repos.id
 				Reposicion.where(:id=>id).last.update_attributes(:fueRepuesto=>true)
-				Stock.movStockUn (almacen, sku)
+				Stock.movStockUn(almacen,sku)
 			end 
 		end
 	end
