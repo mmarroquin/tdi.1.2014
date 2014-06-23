@@ -135,10 +135,14 @@ class Stock < ActiveRecord::Base
 		cantidad_faltante = cantidad
 
 		warehouses = []
-    	warehouses << Warehouse9_api.new
+    	warehouses << Warehouse2_api.new
+    	warehouses << Warehouse3_api.new
     	warehouses << Warehouse4_api.new
     	warehouses << Warehouse5_api.new
+    	warehouses << Warehouse6_api.new
+    	warehouses << Warehouse7_api.new
     	warehouses << Warehouse8_api.new
+    	warehouses << Warehouse9_api.new
 
     	warehouses.shuffle!
 
@@ -169,6 +173,7 @@ class Stock < ActiveRecord::Base
 	    responseEspera = getSkus(almacenEspera_id)	    
 
 	    cantidadesMov = Hash.new
+	    cantidadesMov[:total] = 0
 	    productos.each do |prod| 
 
 	    	price_prod = Product.last(:select => "products.price", :conditions => ['start_date <= ? AND final_date >= ? AND sku = ?', Date.current, Date.current, prod[:sku] ])
@@ -204,7 +209,7 @@ class Stock < ActiveRecord::Base
 		    		
 		    	end	
 		    	cantidadesMov[prod[:sku]] = prod[:cant_mov]		    	
-
+		    	cantidadesMov[:total] += prod[:cant_mov]
 		    else
 		      	reason[:success] = false
 		      	reason[prod[:sku]] = "No existe en bodega de espera el producto" 
