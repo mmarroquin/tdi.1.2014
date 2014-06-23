@@ -11,13 +11,13 @@ namespace :my_namespace do
   desc "TODO"
   task my_task3: :environment do
     puts "Inicio"
-    Rabbitmpq.leerReposicion
+    puts Rabbitmpq.leerReposicion
     puts "1"
-    Rabbitmpq.leerOferta
+    puts Rabbitmpq.leerOferta
     puts "2"
-    Offer.publicarTwitter
+    puts Offer.publicarTwitter
     puts "3"
-    Offer.cambiarPrecio
+    puts Offer.cambiarPrecio
     puts "4"
     #Reposicion.reponer
     puts "Termino"
@@ -25,27 +25,27 @@ namespace :my_namespace do
 
   desc "TODO"
   task my_task10: :environment do
-    Schedule.new_orders
+    puts Schedule.new_orders
     puts "Ordenes Revisadas y Actualizadas"
-    Schedule.main
+    puts Schedule.main
     puts "Ordenes procesadas"
   end
 
   desc "TODO"
   task my_task60: :environment do
-    Schedule.delivery
+    puts Schedule.delivery
     puts "Ordenes despachadas"
-    Stock.vaciarAlmacenRecepcion
+    puts Stock.vaciarAlmacenRecepcion
     puts "Almacen Recepcion vaciada"
   end
 
   desc "TODO"
   task my_taskDia: :environment do
-    Schedule.new_product
+    puts Schedule.new_product
     puts "Productos revisados"
-    Schedule.new_reservations
+    puts Schedule.new_reservations
     puts "Reservas revisadas"
-    Schedule.new_pricing
+    puts Schedule.new_pricing
     puts "Precios revisados"
   end
 
