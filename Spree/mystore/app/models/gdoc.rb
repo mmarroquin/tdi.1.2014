@@ -9,7 +9,7 @@ class Gdoc < ActiveRecord::Base
 	session = GoogleDrive.login("tallerdi.1.2014@gmail.com", "tdi12014")
 
 	# First worksheet of
-	# https://docs.google.com/spreadsheet/ccc?key=pz7XtlQC-PYx-jrVMJErTcg
+	# https://docs.google.com/spreadsheet/ccc?key=0As9H3pQDLg79dHRzMG5US21Tem4wRk05c2ZtVnkxbnc
 	ws = session.spreadsheet_by_key("0As9H3pQDLg79dHRzMG5US21Tem4wRk05c2ZtVnkxbnc").worksheets[0]
 
 	# Gets content of A2 cell.

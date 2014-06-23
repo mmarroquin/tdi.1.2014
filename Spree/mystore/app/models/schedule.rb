@@ -12,7 +12,7 @@ class Schedule < ActiveRecord::Base
 			@orders = Order.where(:id_order => file.no_order)
 			@orders.each do |orden|
 				producto << {:sku => orden.sku_order, :cant => orden.quantity, :clienteId => file.rut}
-				totalQuantity += orden.quantity
+				totalQuantity += orden.quantity.to_i
 			end
 			if producto.length > 0
 				hay_stock = Stock.getStock(producto)[:success]

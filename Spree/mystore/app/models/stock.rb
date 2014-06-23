@@ -222,7 +222,7 @@ class Stock < ActiveRecord::Base
 				
 	end 
 
-	def self.vaciarBodegaPulmon
+	def self.vaciarAlmacenPulmon
 
 		depots = getDepots
 		almacenPulmon = depots.find { |almacen| almacen['pulmon'] == true }
@@ -238,18 +238,20 @@ class Stock < ActiveRecord::Base
 		end
 	end
 
-
-	def self.vaciarBodegaRecepcion (sku)
+	#def self.vaciarBodegaRecepcion(sku)
+	def self.vaciarAlmacenRecepcion
 
 		depots = getDepots
 	    almacenPrincipal = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first
 	    almacenRecepcion = depots.find { |almacen| almacen['recepcion'] == true }
+	    almacenPrincipal_Espacio = almacenPrincipal["totalSpace"].to_i - almacenPrincipal["usedSpace"].to_i
 	    
-	    return movStockSku(almacenRecepcion["_id"], almacenPrincipal["_id"], sku, almacenPrincipal["totalSpace"].to_i - almacenPrincipal["usedSpace"].to_i)
+	    return movAllStock(almacenRecepcion["_id"], almacenPrincipal["_id"], almacenPrincipal_Espacio)
+	    #return movStockSku(almacenRecepcion["_id"], almacenPrincipal["_id"], sku, almacenPrincipal["totalSpace"].to_i - almacenPrincipal["usedSpace"].to_i)
 	end
 
 
-	def self.vaciarBodegaDespacho
+	def self.vaciarAlmacenDespacho
 		
 		depots = getDepots
 	    almacenDespacho = depots.find { |almacen| almacen['despacho'] == true }

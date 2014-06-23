@@ -35,6 +35,8 @@ namespace :my_namespace do
   task my_task60: :environment do
     Schedule.delivery
     puts "Ordenes despachadas"
+    Stock.vaciarAlmacenRecepcion
+    puts "Almacen Recepcion vaciada"
   end
 
   desc "TODO"
@@ -51,15 +53,15 @@ namespace :my_namespace do
   task my_taskMes: :environment do
   end
 
-  desc "TODO"
-  task my_taskReset: :environment do
-    Schedule.new_product
-    puts "Productos revisados"
-    Schedule.new_reservations
-    puts "Reservas revisadas"
-    Schedule.new_pricing
-    puts "Precios revisados"
-    Schedule.new_orders
-    puts "Ordenes Revisadas y Actualizadas"
-  end
+  #desc "TODO"
+  #task my_taskReset: :environment do
+  #  Schedule.new_product
+  #  puts "Productos revisados"
+  #  Schedule.new_reservations
+  #  puts "Reservas revisadas"
+  #  Schedule.new_pricing
+  #  puts "Precios revisados"
+  #  Schedule.new_orders
+  #  puts "Ordenes Revisadas y Actualizadas"
+  #end
 end
