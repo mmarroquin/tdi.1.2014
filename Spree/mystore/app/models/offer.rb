@@ -7,8 +7,12 @@ class Offer < ActiveRecord::Base
 			if segundo_antes_primero(fActual,oferta.inicio) and segundo_antes_primero(oferta.fin, fActual)
 				producto = WebProduct.where(:sku=>oferta.sku).last
 				nombre = producto.name
+				if nombre.length > 65
+					nombre = nombre [0,50] + "..."
+				end
 				precio = oferta.precio
-				mensaje = "Oferta! " + nombre + " a sólo $" + precio + " válido hasta el " + oferta.fin.strftime("%x") + " bit.ly/1uPHoPN"
+				mensaje = "#ofertagrupo1 Oferta! " + nombre + " a sólo $" + precio + " válido hasta el " + oferta.fin.strftime("%x") + " bit.ly/1uPHoPN"
+				puts mensaje.length
 				Tweet.publish(mensaje)
 				Offer.where(:sku=>oferta.sku).last.update_attributes(:fuePublicado=>true)
 				precioB = producto.price_internet

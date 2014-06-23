@@ -9,6 +9,7 @@ class Reposicion < ActiveRecord::Base
 				sku = repos.sku
 				id=repos.id
 				Reposicion.where(:id=>id).last.update_attributes(:fueRepuesto=>true)
+				Stock.movStockUn (almacen, sku)
 			end 
 		end
 	end
