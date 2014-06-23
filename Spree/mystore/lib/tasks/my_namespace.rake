@@ -10,6 +10,17 @@ namespace :my_namespace do
 
   desc "TODO"
   task my_task10: :environment do
+    puts "Inicio"
+    Rabbitmpq.leerReposicion
+    puts "1"
+    Rabbitmpq.leerOferta
+    puts "2"
+    Offer.publicarTwitter
+    puts "3"
+    Offer.cambiarPrecio
+    puts "4"
+    Reposicion.reponer
+    puts "Termino"
   end
 
   desc "TODO"
