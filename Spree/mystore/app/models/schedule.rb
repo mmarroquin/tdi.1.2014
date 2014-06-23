@@ -39,7 +39,7 @@ class Schedule < ActiveRecord::Base
 		end
 		return "Proceso de pedidos correcto"
 		rescue
-			return "Error en el método"
+			return "Error en el metodo"
 		end
 	end
 
@@ -70,7 +70,7 @@ class Schedule < ActiveRecord::Base
 		end
 		return "Delivery correcto"
 		rescue
-			return "Error en el método"
+			return "Error en el metodo"
 		end
 	end
 
@@ -78,9 +78,9 @@ class Schedule < ActiveRecord::Base
 		#Revisar nuevos pedidos desde FTP - Ingresar nuevos pedidos
 		begin
 		Sftp.orders
-		return "Revisión correcta"
+		return "Revision correcta"
 		rescue
-			return "Error en el método"
+			return "Error en el metodo"
 		end
 	end
 
@@ -88,9 +88,9 @@ class Schedule < ActiveRecord::Base
 		#Revisar nuevas reservas desde Google Spreadsheet - Ingresar/Actualizar nuevas reservas
 		begin
 		Gdoc.obtain_info
-		return "Revisión correcta"
+		return "Revision correcta"
 		rescue
-			return "Error en el método"
+			return "Error en el metodo"
 		end
 	end
 
@@ -98,9 +98,9 @@ class Schedule < ActiveRecord::Base
 		#Revisar nuevos precios desde Access - Ingresar/Actualizar nuevos precios
 		begin
 		Product.readcsv
-		return "Revisión correcta"
+		return "Revision correcta"
 		rescue
-			return "Error en el método"
+			return "Error en el metodo"
 		end
 	end
 
@@ -108,9 +108,9 @@ class Schedule < ActiveRecord::Base
 		#Revisar nuevos productos desde archivo Json - Ingresar/Actualizar nuevos productos
 		begin
 		WebProduct.read
-		return "Revisión correcta"
+		return "Revision correcta"
 		rescue
-			return "Error en el método"
+			return "Error en el metodo"
 		end
 	end
 
