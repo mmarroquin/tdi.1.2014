@@ -72,8 +72,8 @@ test:
 production:
   sessions:
     default:
-      database: datawarehouse_production
+      database: TDI
       hosts:
         - 0.0.0.0:27017
-      username: datawarehouse_mongo
-      password: "1234567890"
+      #username: datawarehouse_mongo
+      #password: "1234567890"
