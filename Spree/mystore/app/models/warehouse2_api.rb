@@ -4,8 +4,8 @@ class Warehouse2_api
  default_params output: 'json'
  format :json
 
-  $user = "grupo1"
-  $password = "eryfzwfgjhcf4663gffjhdd256fbhgd3673dh"
+  @@user = "grupo1"
+  @@password = "eryfzwfgjhcf4663gffjhdd256fbhgd3673dh"
 
   def get_prod(sku, cantidad, almacen_id)
   	begin
@@ -23,7 +23,7 @@ class Warehouse2_api
 
   def request(sku, cantidad, almacen_id)
   	url =  "http://integra2.ing.puc.cl/api/pedirProducto"
-	  response = HTTParty.post(url,:body => { :usuario => $user, :password => $password, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
+	  response = HTTParty.post(url,:body => { :usuario => @@user, :password => @@password, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
 	  return JSON.parse(response.body, symbolize_names: true)
   end
 

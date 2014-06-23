@@ -4,8 +4,8 @@ class Warehouse3_api
  default_params output: 'json'
  format :json
 
-  $user = "grupo1"
-  $password = "grupo1"
+  @@user = "grupo1"
+  @@password = "grupo1"
 
   def get_prod(sku, cantidad, almacen_id)
   	begin
@@ -23,7 +23,7 @@ class Warehouse3_api
 
   def request(sku, cantidad, almacen_id)
   	url =  "http://integra3.ing.puc.cl/api/pedirProducto"
-	return response = HTTParty.post(url,:body => { :usuario => $user, :password => $password, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
+	return response = HTTParty.post(url,:body => { :usuario => @@user, :password => @@password, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
   end
 
 end

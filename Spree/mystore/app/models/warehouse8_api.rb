@@ -4,9 +4,9 @@ class Warehouse8_api
  default_params output: 'json'
  format :json
 
-  $user = "grupo1"
+  @@user = "grupo1"
   password = "grupo1"
-  $encryptedPassword = Digest::SHA1.hexdigest(password)
+  @@encryptedPassword = Digest::SHA1.hexdigest(password)
 
   def get_prod(sku, cantidad, almacen_id)
 	begin
@@ -24,7 +24,7 @@ class Warehouse8_api
 
   def request(sku, cantidad, almacen_id)
   	url =  "http://integra8.ing.puc.cl/api/pedirProducto"
-	return HTTParty.post(url,:body => { :usuario => $user, :password => $encryptedPassword, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
+	return HTTParty.post(url,:body => { :usuario => @@user, :password => @@encryptedPassword, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
   end
 
 end

@@ -4,8 +4,8 @@ class Warehouse9_api
  default_params output: 'json'
  format :json
 
-  $user = "grupo1"
-  $password = "KB74LrBL"
+  @@user = "grupo1"
+  @@password = "KB74LrBL"
 
   def get_prod(sku, cantidad, almacen_id)
 	begin
@@ -31,12 +31,12 @@ class Warehouse9_api
   end
 
   def requestStock(sku)
-  	url = "http://integra9.ing.puc.cl/api/disponibles/#{$user}/#{$password}/" + sku
+  	url = "http://integra9.ing.puc.cl/api/disponibles/#{@@user}/#{@@password}/" + sku
 	return HTTParty.get(url)
   end
 
   def requestMov(sku, cantidad, almacen_id)
-  	url =  "http://integra9.ing.puc.cl/api/pedirProducto/#{$user}/#{$password}/" + sku
+  	url =  "http://integra9.ing.puc.cl/api/pedirProducto/#{@@user}/#{@@password}/" + sku
 	return HTTParty.post(url,:body => { :almacenId => almacen_id, :cantidad => cantidad })
   end	
 
