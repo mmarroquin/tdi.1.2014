@@ -113,4 +113,11 @@ class Schedule < ActiveRecord::Base
 			return "Error en el método"
 		end
 	end
+
+	def self.reset
+		new_product
+		new_pricing
+		new_reservations
+		new_orders
+	end
 end
