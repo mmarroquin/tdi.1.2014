@@ -24,7 +24,7 @@ class Schedule < ActiveRecord::Base
 					response[1].each do |key,value|
 					producto.delete_if { |prod| prod[:sku] == key }
 					@orders.update_all({:broked => true}, ['sku_order = ?', key])
-					DataWarehouse::BrokenOrder.create(client_id: file.rut, order_id: file.no_order, address: direccion, reason: value , deliveryDate: Date.current)
+					DataWarehouse::BrokenProduct.create(client_id: file.rut, order_id: file.no_order, sku: key, address: direccion, reason: value , deliveryDate: Date.current)
 					end
 					#despacho[0] = Stock.despachar(producto, direccion, file.no_order)
 				end
@@ -57,10 +57,10 @@ class Schedule < ActiveRecord::Base
 				if producto.length > 0
 					direccion = Crm.crm(file.rut, file.direcc_id)
 					response = Stock.despachar(producto, direccion, file.no_order)
-					DataWarehouse::DeliveryOrder.create(client_id: file.rut, order_id: file.no_order, address: direccion, quantitySent: response[1][:total] , deliveryDate: Date.current)
 					@orders.each do |orden|
 						if !response[1].include?(orden.sku_order)
 							orden.delivered = true
+							DataWarehouse::DeliveredProduct.create(client_id: file.rut, order_id: file.no_order, sku: orden.sku_order, address: direccion, quantitySent: response[1][:total] , deliveryDate: Date.current)
 						end
 					end
 				end	
