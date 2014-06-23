@@ -11,7 +11,7 @@ class Warehouse1_api
   def get_prod(sku, cantidad, almacen_id)
 	begin
 	response = request(sku, cantidad, almacen_id)
-	if !response.include?("error") && response.include?("cantidad")
+	if !response.include?("error") && response.include?("amountSent")
 		return response["amountSent"]
 	else 
 		return response["error"]

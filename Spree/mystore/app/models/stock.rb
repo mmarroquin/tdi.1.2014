@@ -19,46 +19,46 @@ class Stock < ActiveRecord::Base
 	    almacenDespacho = depots.find { |almacen| almacen['despacho'] == true }
 	    almacenPrincipal = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first
 	    almacenEspera = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.last
-	    almacenRecepcion = depots.find { |almacen| almacen['recepcion'] == true }
+	    #almacenRecepcion = depots.find { |almacen| almacen['recepcion'] == true }
 
 	    almacenPrincipal_id = almacenPrincipal["_id"]
 	    almacenPrincipal_espacio = almacenPrincipal["totalSpace"].to_i - almacenPrincipal["usedSpace"].to_i
 	    almacenEspera_id = almacenEspera["_id"]
 	    almacenEspera_espacio = almacenEspera["totalSpace"].to_i - almacenEspera["usedSpace"].to_i
-	    almacenRecepcion_id = almacenRecepcion["_id"]
+	    #almacenRecepcion_id = almacenRecepcion["_id"]
      
 
 	    responsePrincipal = getSkus(almacenPrincipal_id)  
-	    responseRecepcion = getSkus(almacenRecepcion_id)
+	    #responseRecepcion = getSkus(almacenRecepcion_id)
 	    responseEspera = getSkus(almacenEspera_id)
 
 
 	    espacioPedido = 0
 	    productos.each do |prod| 
 		    stockPrincipal = 0
-		    stockRecepcion = 0
+		    #stockRecepcion = 0
 		    prod[:stockBP] = 0
-		    prod[:stockBR] = 0
-		    if responsePrincipal.find { |producto| producto['_id'] == prod[:sku] } || responseRecepcion.find { |producto| producto['_id'] == prod[:sku] }
+		    #prod[:stockBR] = 0
+		    if responsePrincipal.find { |producto| producto['_id'] == prod[:sku] } #|| responseRecepcion.find { |producto| producto['_id'] == prod[:sku] }
 
 			      if prodActual = responsePrincipal.find { |producto| producto['_id'] == prod[:sku] }
 			        stockPrincipal = prodActual["total"]
 			        prod[:stockBP] = stockPrincipal
 			      end
-			      if prodActual = responseRecepcion.find { |producto| producto['_id'] == prod[:sku] }
-			      	stockRecepcion = prodActual["total"]
-			      	prod[:stockBR] = stockRecepcion
+			      #if prodActual = responseRecepcion.find { |producto| producto['_id'] == prod[:sku] }
+			      #	stockRecepcion = prodActual["total"]
+			      #	prod[:stockBR] = stockRecepcion
 
-			      end
+			      #end
 
 			      espacioPedido += prod[:cant].to_i
 			      if !prod.include?(:api)
 			      others_reserv = Gdoc.return_reservation(prod[:sku], prod[:clienteId])
 			  	  end
 
-			      if stockPrincipal+stockRecepcion < prod[:cant].to_i
+			      if stockPrincipal < prod[:cant].to_i #stockPrincipal+stockRecepcion
 			      	if !prod.include?(:api)
-			      		cantPedir = prod[:cant].to_i - stockPrincipal - stockRecepcion
+			      		cantPedir = prod[:cant].to_i - stockPrincipal #- stockRecepcion
 		    			cantRecibida = pedirDespacho(almacenPrincipal_id, prod[:sku], cantPedir)
 		    			if cantRecibida < cantPedir
 		    				su[:success] = false
@@ -69,7 +69,7 @@ class Stock < ActiveRecord::Base
 		    			su[:success] = false
 			      		reason[prod[:sku]] = "No existe suficiente stock del producto" 
 		    		end
-		    	  elsif stockPrincipal+stockRecepcion-others_reserv.to_i < prod[:cant].to_i
+		    	  elsif stockPrincipal-others_reserv.to_i < prod[:cant].to_i #stockPrincipal+stockRecepcion-others_reserv.to_i
 		    	  	su[:success] = false
 		    	  	reason[prod[:sku]] = "No existe stock disponible debido a reservas"
 		    	  	Rails.logger.warn("No existe stock disponible del producto " + prod[:sku] + " debido a reservas")
@@ -81,7 +81,7 @@ class Stock < ActiveRecord::Base
 		      
 		    else
 		      	if !prod.include?(:api)
-		      		cantPedir = prod[:cant].to_i - stockPrincipal - stockRecepcion
+		      		cantPedir = prod[:cant].to_i - stockPrincipal #- stockRecepcion
 		    		cantRecibida = pedirDespacho(almacenPrincipal_id, prod[:sku], cantPedir)
 		    		if cantRecibida < cantPedir
 		    			su[:success] = false
@@ -112,24 +112,24 @@ class Stock < ActiveRecord::Base
 		productos.each do |prod|
 			cantidadProd = prod[:cant].to_i
 			cantProdPrincipal = 0
-			cantProdRecepcion = 0
+			#cantProdRecepcion = 0
 
 			if cantidadProd <= prod[:stockBP]
 				cantProdPrincipal = cantidadProd
 			else
 				cantProdPrincipal = prod[:stockBP]
-				cantProdRecepcion = cantidadProd - cantProdPrincipal
+				#cantProdRecepcion = cantidadProd - cantProdPrincipal
 			end
 
 			resultP = movStockSku(almacenPrincipal_id, almacenEspera_id, prod[:sku], cantProdPrincipal)
-			resultR = movStockSku(almacenRecepcion_id, almacenEspera_id, prod[:sku], cantProdRecepcion)
+			#resultR = movStockSku(almacenRecepcion_id, almacenEspera_id, prod[:sku], cantProdRecepcion)
 			
 			if resultP.include?(:error)
 				reason[:success] = false
 			    reason[:error] = resultP[:error]
-			elsif resultR.include?(:error)
-				reason[:success] = false
-			    reason[:error] = resultR[:error]
+			#elsif resultR.include?(:error)
+			#	reason[:success] = false
+			#   reason[:error] = resultR[:error]
 			end
 
 			if !prod.include?(:api)
