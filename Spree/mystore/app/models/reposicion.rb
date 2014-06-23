@@ -5,7 +5,7 @@ class Reposicion < ActiveRecord::Base
 		rep = Reposicion.where(:fueRepuesto=>false)
 		rep.each do |repos|
 			if segundo_antes_primero(fActual,repos.fecha)
-				almacen =repos.almacenId
+				almacen =repos.almacenId.to_s
 				sku = repos.sku.to_s
 				id=repos.id
 				Reposicion.where(:id=>id).last.update_attributes(:fueRepuesto=>true)
