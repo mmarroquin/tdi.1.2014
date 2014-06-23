@@ -6,7 +6,7 @@ class Api::V1::RequestController < ApplicationController
   # POST /api/v1/pedirProducto
   def create
     if params[:password] == $permisos[params[:usuario]]
-    @resultado = Request.pedirProducto(params[:almacenId], params[:sku], params[:cant])
+    @resultado = Request.pedirProducto(params[:sku], params[:cant], params[:almacenId])
     render json: @resultado
     else
     render json: {:error => "Usuario o password incorrecto"}

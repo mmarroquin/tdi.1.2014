@@ -8,12 +8,16 @@ class Warehouse6_api
   $password = "1"
 
   def get_prod(sku, cantidad, almacen_id)
+  	begin
   	respjson = request(sku,cantidad,almacen_id)
-	  if !respjson.include?(:error)
+	  if !respjson.include?(:error) && respjson.include?(:cantidad)
 		  return respjson[:cantidad].to_i
 	  else 
 		  return -1
 	  end
+	rescue
+      return -1
+    end
 	
   end
 

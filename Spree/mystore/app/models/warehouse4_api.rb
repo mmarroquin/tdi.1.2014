@@ -9,12 +9,16 @@ class Warehouse4_api
   $encryptedPassword = Digest::SHA1.hexdigest(password)
 
   def get_prod(sku, cantidad, almacen_id)
-  	respjson = request(sku,cantidad,almacen_id)
-	  if !respjson.include?(:error)
+  	begin
+    respjson = request(sku,cantidad,almacen_id)
+	  if !respjson.include?(:error) && respjson.include?(:cantidad)
 		  return respjson[:cantidad].to_i
 	  else 
 		  return -1
 	  end
+    rescue
+      return -1
+    end
 	
   end
 

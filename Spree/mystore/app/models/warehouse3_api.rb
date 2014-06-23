@@ -8,13 +8,17 @@ class Warehouse3_api
   $password = "grupo1"
 
   def get_prod(sku, cantidad, almacen_id)
-  	respjson = request(sku,cantidad,almacen_id)
-	if !respjson.include?(:error)
-		return respjson[:cantidad].to_i
-	else 
-		return -1
-	end
-	
+  	begin
+    respjson = request(sku,cantidad,almacen_id)
+	  if !respjson.include?(:error) && respjson.include?(:cantidad)
+		  return respjson[:cantidad].to_i
+	  else 
+		  return -1
+	  end
+	  rescue
+      return -1
+    end
+
   end
 
   def request(sku, cantidad, almacen_id)

@@ -43,7 +43,7 @@ class Sftp < ActiveRecord::Base
 	      	    sku = ord[0][1]
 	      	    aux = ord
 	      	    quantity = ord[1][1]
-	            Order.create(:id_order => n_pedido, :quantity => quantity, :sku_order => sku, :delivered => false)
+	            Order.create(:id_order => n_pedido, :quantity => quantity, :sku_order => sku, :delivered => false, :broked => false)
 	          end
 	        end
 	          #chld = 1

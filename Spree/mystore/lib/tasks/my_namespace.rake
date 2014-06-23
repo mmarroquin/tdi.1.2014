@@ -19,7 +19,7 @@ namespace :my_namespace do
     puts "3"
     Offer.cambiarPrecio
     puts "4"
-    Reposicion.reponer
+    #Reposicion.reponer
     puts "Termino"
   end
 

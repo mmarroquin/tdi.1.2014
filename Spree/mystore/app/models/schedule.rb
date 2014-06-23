@@ -11,18 +11,27 @@ class Schedule < ActiveRecord::Base
 			hay_stock = false
 			@orders = Order.where(:id_order => file.no_order)
 			@orders.each do |orden|
-				producto << {:sku => orden.sku_order, :cant => orden.quantity, :clienteId => file.rut}
-				totalQuantity += orden.quantity.to_i
+				producto << {:sku => orden.sku_order, :cant => orden.quantity.to_i, :clienteId => file.rut}
+				#totalQuantity += orden.quantity.to_i
 			end
 			if producto.length > 0
-				hay_stock = Stock.getStock(producto)[:success]
-
-				if hay_stock
-					Stock.prepareStock(producto)
+				response = Stock.getStock(producto)
+				hay_stock = response[0][:success]
+				direccion = Crm.crm(file.rut, file.direcc_id)
+				file.update(:processed => true, :success => hay_stock)
+				
+				if !hay_stock
+					response[1].each do |key,value|
+					producto.delete_if { |prod| prod[:sku] == key }
+					@orders.update_all({:broked => true}, ['sku_order = ?', key])
+					DataWarehouse::BrokenOrder.create(client_id: file.rut, order_id: file.no_order, address: direccion, reason: value , deliveryDate: Date.current)
+					end
 					#despacho[0] = Stock.despachar(producto, direccion, file.no_order)
 				end
-				direccion = Crm.crm(file.rut, file.direcc_id)
-				FileOrder.update(:processed => true, :success => hay_stock)
+				Stock.prepareStock(producto)
+				producto.each do |prod|
+					totalQuantity += prod[:cant]
+				end
 				DataWarehouse::FileOrder.create(client_id: file.rut, order_id: file.no_order, address: direccion, quantity: totalQuantity, success: hay_stock, deliveryDate: file.deliveryDate, orderDate: file.orderDate)
 			end
 
@@ -31,26 +40,28 @@ class Schedule < ActiveRecord::Base
 	end
 
 	def self.delivery
-		@ordenesADespachar = FileOrder.all(:conditions => ['deliveryDate <= ? AND processed = ? AND success = ? AND delivered = ?', Date.current, true, true, false])
+		@ordenesADespachar = FileOrder.all(:conditions => ['processed = ? AND dilevered = ? AND deliveryDate <= ?', true, false, Date.current])
 		#FileOrder.where(:processed => true, :success => true, :delivered => false, :deliveryDate )
 		@ordenesADespachar.each do |file|
 			producto = []
-			@orders = Order.where(:id_order => file.no_order, :delivered => false)
-			@orders.each do |orden|
-				producto << {:sku => orden.sku_order, :cant => orden.quantity, :clienteId => file.rut}
-			end
-			if producto.length > 0
-				direccion = Crm.crm(file.rut, file.direcc_id)
-				response = Stock.despachar(producto, direccion, file.no_order)
-				DataWarehouse::DeliveryOrder.create(client_id: file.rut, order_id: file.no_order, address: direccion, quantitySent: response[1][:total] , deliveryDate: Date.current)
-				@orders.each do |orden|
-					if !response[1].include?(orden.sku_order)
-						orden.delivered = true
-					end
+			@orders = Order.where(:id_order => file.no_order, :broked => false, :delivered => false)
+			if @orders != nil
+ 				@orders.each do |orden|
+					producto << {:sku => orden.sku_order, :cant => orden.quantity, :clienteId => file.rut}
 				end
+				if producto.length > 0
+					direccion = Crm.crm(file.rut, file.direcc_id)
+					response = Stock.despachar(producto, direccion, file.no_order)
+					DataWarehouse::DeliveryOrder.create(client_id: file.rut, order_id: file.no_order, address: direccion, quantitySent: response[1][:total] , deliveryDate: Date.current)
+					@orders.each do |orden|
+						if !response[1].include?(orden.sku_order)
+							orden.delivered = true
+						end
+					end
+				end	
 			else
 				FileOrder.update(:delivered => true)
-			end	
+			end
 		end
 	end
 

@@ -12,7 +12,8 @@ class Stock < ActiveRecord::Base
 
   	def self.getStock(productos)
 		reason = Hash.new
-		reason[:success] = true
+		su = Hash.new
+		su[:success] = true
 	    
 	    depots = getDepots
 	    almacenDespacho = depots.find { |almacen| almacen['despacho'] == true }
@@ -47,6 +48,7 @@ class Stock < ActiveRecord::Base
 			      if prodActual = responseRecepcion.find { |producto| producto['_id'] == prod[:sku] }
 			      	stockRecepcion = prodActual["total"]
 			      	prod[:stockBR] = stockRecepcion
+
 			      end
 
 			      espacioPedido += prod[:cant].to_i
@@ -55,36 +57,47 @@ class Stock < ActiveRecord::Base
 			  	  end
 
 			      if stockPrincipal+stockRecepcion < prod[:cant].to_i
-			      	reason[:success] = false
-			      	reason[prod[:sku]] = "No existe suficiente stock del producto" 
 			      	if !prod.include?(:api)
-			      	cantPedir = prod[:cant].to_i - stockPrincipal - stockRecepcion
-		    		cantRecibida = pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
-		    		reason[prod[:sku]] = {:reason => "No existe suficiente stock del producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
+			      		cantPedir = prod[:cant].to_i - stockPrincipal - stockRecepcion
+		    			cantRecibida = pedirDespacho(almacenPrincipal_id, prod[:sku], cantPedir)
+		    			if cantRecibida < cantPedir
+		    				su[:success] = false
+		    				reason[prod[:sku]] = {:reason => "No existe suficiente stock del producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
+		    				Rails.logger.warn("No existe suficiente stock del producto " + prod[:sku])
+		    			end
+		    		else
+		    			su[:success] = false
+			      		reason[prod[:sku]] = "No existe suficiente stock del producto" 
 		    		end
 		    	  elsif stockPrincipal+stockRecepcion-others_reserv.to_i < prod[:cant].to_i
-		    	  	reason[:success] = false
+		    	  	su[:success] = false
 		    	  	reason[prod[:sku]] = "No existe stock disponible debido a reservas"
-			      elsif espacioPedido >  almacenEspera_espacio
-			      	reason[:success] = false 
-			      	reason[:espacio] = "No existe capacidad en la Bodega de Espera"
+		    	  	Rails.logger.warn("No existe stock disponible del producto " + prod[:sku] + " debido a reservas")
+			      #elsif espacioPedido >  almacenEspera_espacio
+			      #	reason[:success] = false 
+			      #	reason[:espacio] = "No existe capacidad en la Bodega de Espera"
 	
 			      end
 		      
 		    else
-		      	reason[:success] = false
-		      	reason[prod[:sku]] = "No existe en bodega el producto" 
 		      	if !prod.include?(:api)
-		      	cantPedir = prod[:cant].to_i - stockPrincipal - stockRecepcion
-		    	cantRecibida = pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
-		    	reason[prod[:sku]] = {:reason => "No existe en bodega el producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
+		      		cantPedir = prod[:cant].to_i - stockPrincipal - stockRecepcion
+		    		cantRecibida = pedirDespacho(almacenPrincipal_id, prod[:sku], cantPedir)
+		    		if cantRecibida < cantPedir
+		    			su[:success] = false
+		    			reason[prod[:sku]] = {:reason => "No existe en bodega el producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
+		    			Rails.logger.warn("No existe en bodega el producto " + prod[:sku])
+		    		end
+		    	else
+		    		su[:success] = false
+		      		reason[prod[:sku]] = "No existe en bodega el producto" 
 		    	end 
 		    end 
 		    
 
 		end
 
-		return reason
+		return su,reason
 	end	
 	
 	def self.prepareStock(productos)
@@ -125,6 +138,7 @@ class Stock < ActiveRecord::Base
 
 		end   	
 		reason[:resultado] = "El stock esta listo y fue movido a la Bodega de Espera"
+		Rails.logger.warn("El stock esta listo y fue movido a la Bodega de Espera")
 
 		return reason
 	end  
@@ -140,7 +154,7 @@ class Stock < ActiveRecord::Base
     	warehouses << Warehouse4_api.new
     	warehouses << Warehouse5_api.new
     	warehouses << Warehouse6_api.new
-    	warehouses << Warehouse7_api.new
+    	#warehouses << Warehouse7_api.new
     	warehouses << Warehouse8_api.new
     	warehouses << Warehouse9_api.new
 
@@ -200,9 +214,11 @@ class Stock < ActiveRecord::Base
 		    		if responseEnv.include?("error")
 			    		reason[:success] = false
 			    		reason[prodUnidad["_id"]] = responseEnv["error"]
+			    		Rails.logger.warn(prodUnidad["_id"] + ": " + responseEnv["error"])
 			    	elsif !responseEnv["despachado"]
 			    		reason[:success] = false
 			    		reason[prodUnidad["_id"]] = "No se pudo despachar el producto"
+			    		Rails.logger.warn("No se pudo despachar el producto " + prodUnidad['_id'])
 			    	else
 			    		prod[:cant_mov] += 1
 		    		end 
@@ -213,6 +229,7 @@ class Stock < ActiveRecord::Base
 		    else
 		      	reason[:success] = false
 		      	reason[prod[:sku]] = "No existe en bodega de espera el producto" 
+		      	Rails.logger.warn("No existe en bodega de espera el producto " + prod[:sku])
 		    end 
 		    
 

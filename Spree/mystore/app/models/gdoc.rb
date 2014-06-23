@@ -90,7 +90,7 @@ class Gdoc < ActiveRecord::Base
 
 	def self.return_reservation(sku, cliente_id)
 		others_reservation_cant = 0
-		aux = Reservation.all(:select => "reservations.amount, reservations.used", :conditions => ['date >= ? AND sku = ? AND NOT client = ?', Date.current - 7.days, sku, cliente_id])
+		aux = Reservation.all(:select => "reservations.amount, reservations.used", :conditions => ['sku = ? AND date >= ? AND NOT client = ?', sku, Date.current - 7.days, cliente_id])
 		if aux == nil
 			return 0
 		else

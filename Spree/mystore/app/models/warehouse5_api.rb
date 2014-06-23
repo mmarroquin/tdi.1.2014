@@ -9,12 +9,16 @@ class Warehouse5_api
   $encryptedPassword = Digest::SHA1.hexdigest(password)
 
   def get_prod(sku, cantidad, almacen_id)
-	  response = request(sku, cantidad, almacen_id)
-	  if !response.include?("error")
+	  begin
+    response = request(sku, cantidad, almacen_id)
+	  if !response.include?("error") && response.include?("cantidad")
 		  return response["cantidad"].to_i
 	  else 
 		  return -1
 	  end
+    rescue
+      return -1
+    end
 
   end
 
