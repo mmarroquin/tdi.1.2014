@@ -110,10 +110,11 @@ class Crm < ActiveRecord::Base
 
 
 
-		@resultado = @empleado_street +","+ @comuna_empleado +","+ @region_empleado
+		@resultado = @street_empleado + "," + @comuna_empleado + "," + @region_empleado
 
 
 
 		return @resultado
 
 	end
+end

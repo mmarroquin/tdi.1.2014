@@ -37,13 +37,13 @@ class Sftp < ActiveRecord::Base
 	            node.children.map{ |n| [n.name, n.text.strip] if n.elem? }.compact
 	          end.compact
 	          
-	          FileOrder.create(:orderDate => DateTime.parse(fecha + " " + hora), :deliveryDate => fechaDespacho, :no_order => n_pedido, :rut => rut, :direcc_id =>direc_id, :processed => false, :delivered => false)
+	          FileOrder.create(:orderDate => DateTime.parse(fecha + " " + hora), :deliveryDate => fechaDespacho, :quantity => 0, :no_order => n_pedido, :rut => rut, :direcc_id =>direc_id, :processed => false, :delivered => false, :success => false)
 	          	
 	      	  chld.each do |ord|
 	      	    sku = ord[0][1]
 	      	    aux = ord
 	      	    quantity = ord[1][1]
-	            Order.create(:id_order => n_pedido, :quantity => quantity, :sku_order => sku, :delivered => false)
+	            Order.create(:id_order => n_pedido, :quantity => quantity, :sku_order => sku, :delivered => false, :broked => false)
 	          end
 	        end
 	          #chld = 1

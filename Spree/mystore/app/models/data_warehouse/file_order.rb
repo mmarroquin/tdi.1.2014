@@ -1,4 +1,4 @@
-Class DataWarehouse::FileOrder
+class DataWarehouse::FileOrder
 include Mongoid::Document
 
 field :client_id, type: String

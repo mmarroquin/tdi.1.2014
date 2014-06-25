@@ -1,12 +1,11 @@
-class Warehouse4_api
+class Warehouse3_api
 
  include HTTParty
  default_params output: 'json'
  format :json
 
   @@user = "grupo1"
-  password = "grupo1"
-  @@encryptedPassword = Digest::SHA1.hexdigest(password)
+  @@password = "grupo1"
 
   def get_prod(sku, cantidad, almacen_id)
   	begin
@@ -16,16 +15,15 @@ class Warehouse4_api
 	  else 
 		  return -1
 	  end
-    rescue
+	  rescue
       return -1
     end
-	
+
   end
 
   def request(sku, cantidad, almacen_id)
-  	url =  "http://integra4.ing.puc.cl/api/pedirProducto"
-	  response = HTTParty.post(url,:body => { :usuario => @@user, :password => @@encryptedPassword, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
-	  return JSON.parse(response.body, symbolize_names: true)
+  	url =  "http://integra3.ing.puc.cl/api/pedirProducto"
+	return response = HTTParty.post(url,:body => { :usuario => @@user, :password => @@password, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
   end
 
 end

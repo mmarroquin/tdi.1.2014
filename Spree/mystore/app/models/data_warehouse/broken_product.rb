@@ -1,12 +1,11 @@
-Class DataWarehouse::FileOrder
+class DataWarehouse::BrokenProduct
 include Mongoid::Document
 
 field :client_id, type: String
 field :order_id, type: String
-field :quantity, type: Integer
+field :sku,	type: String
+field :reason, type: String
 field :address, type: String # Guardar full adress
-field :success, type: Boolean
 field :deliveryDate, type: Date
-field :orderDate, type: DateTime
 
 end
