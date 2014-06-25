@@ -44,6 +44,14 @@ ActiveRecord::Schema.define(version: 20140622011447) do
     t.boolean  "TienePrecioBase"
   end
 
+  create_table "orders", force: true do |t|
+    t.string   "id_order"
+    t.string   "sku_order"
+    t.string   "quantity"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "products", force: true do |t|
     t.string   "sku"
     t.string   "price"
@@ -81,7 +89,7 @@ ActiveRecord::Schema.define(version: 20140622011447) do
     t.date     "date"
     t.string   "client"
     t.integer  "amount"
-    t.integer  "used"
+    t.boolean  "used"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
