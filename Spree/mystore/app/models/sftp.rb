@@ -16,6 +16,7 @@ class Sftp < ActiveRecord::Base
         begin
         	n_pedido = remote_file.name.split("_")[1].split(".")[0]
         rescue
+        	return "Termino"
         end
         if count > 2
 	    #    begin
