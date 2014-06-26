@@ -43,6 +43,12 @@ class Schedule < ActiveRecord::Base
 		end
 	end
 
+	def self.prueba
+
+		a = DataWarehouse::DeliveredProduct.create(cliente_id: "5920406-8")
+		puts a
+	end
+
 	def self.delivery
 		begin
 		@ordenesADespachar = FileOrder.all(:conditions => ['processed = ? AND dilevered = ? AND deliveryDate <= ?', true, false, Date.current])
@@ -61,6 +67,7 @@ class Schedule < ActiveRecord::Base
 						if !response[1].include?(orden.sku_order)
 							orden.delivered = true
 							DataWarehouse::DeliveredProduct.create(client_id: file.rut, order_id: file.no_order, sku: orden.sku_order, address: direccion, quantitySent: response[1][:total] , deliveryDate: Date.current)
+							Report.create(:n_pedido => file.no_order, :despachado => orden.delivered)
 						end
 					end
 				end	

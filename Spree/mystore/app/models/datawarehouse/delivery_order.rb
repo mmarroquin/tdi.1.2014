@@ -1,4 +1,5 @@
 Class DataWarehouse::DeliveryOrder
+
 include Mongoid::Document
 
 field :client_id, type: String
