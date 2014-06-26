@@ -19,17 +19,17 @@ class Stock < ActiveRecord::Base
 	    almacenDespacho = depots.find { |almacen| almacen['despacho'] == true }
 	    almacenPrincipal = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first
 	    almacenEspera = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.last
-	    #almacenRecepcion = depots.find { |almacen| almacen['recepcion'] == true }
+	    almacenRecepcion = depots.find { |almacen| almacen['recepcion'] == true }
 
 	    almacenPrincipal_id = almacenPrincipal["_id"]
 	    almacenPrincipal_espacio = almacenPrincipal["totalSpace"].to_i - almacenPrincipal["usedSpace"].to_i
 	    almacenEspera_id = almacenEspera["_id"]
 	    almacenEspera_espacio = almacenEspera["totalSpace"].to_i - almacenEspera["usedSpace"].to_i
-	    #almacenRecepcion_id = almacenRecepcion["_id"]
+	    almacenRecepcion_id = almacenRecepcion["_id"]
      
 
 	    responsePrincipal = getSkus(almacenPrincipal_id)  
-	    #responseRecepcion = getSkus(almacenRecepcion_id)
+	    responseRecepcion = getSkus(almacenRecepcion_id)
 	    responseEspera = getSkus(almacenEspera_id)
 
 
@@ -59,7 +59,8 @@ class Stock < ActiveRecord::Base
 			      if stockPrincipal < prod[:cant].to_i #stockPrincipal+stockRecepcion
 			      	if !prod.include?(:api)
 			      		cantPedir = prod[:cant].to_i - stockPrincipal #- stockRecepcion
-		    			cantRecibida = pedirDespacho(almacenPrincipal_id, prod[:sku], cantPedir)
+		    			cantRecibida = pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
+		    			movStockSku (almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida)
 		    			if cantRecibida < cantPedir
 		    				su[:success] = false
 		    				reason[prod[:sku]] = {:reason => "No existe suficiente stock del producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
@@ -82,7 +83,8 @@ class Stock < ActiveRecord::Base
 		    else
 		      	if !prod.include?(:api)
 		      		cantPedir = prod[:cant].to_i - stockPrincipal #- stockRecepcion
-		    		cantRecibida = pedirDespacho(almacenPrincipal_id, prod[:sku], cantPedir)
+		    		cantRecibida = pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
+		    		movStockSku (almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida)
 		    		if cantRecibida < cantPedir
 		    			su[:success] = false
 		    			reason[prod[:sku]] = {:reason => "No existe en bodega el producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
