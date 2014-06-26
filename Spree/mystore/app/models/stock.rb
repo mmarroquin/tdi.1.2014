@@ -16,7 +16,6 @@ class Stock < ActiveRecord::Base
 		su[:success] = true
 	    
 	    depots = getDepots
-	    almacenDespacho = depots.find { |almacen| almacen['despacho'] == true }
 	    almacenPrincipal = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first
 	    almacenEspera = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.last
 	    almacenRecepcion = depots.find { |almacen| almacen['recepcion'] == true }
