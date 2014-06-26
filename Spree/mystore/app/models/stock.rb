@@ -133,7 +133,8 @@ class Stock < ActiveRecord::Base
 			end
 
 			if !prod.include?(:api)
-				Gdoc.use_reservation(prod[:sku], prod[:clienteId], resultP[:cant_mov] + resultR[:cant_mov])
+				Gdoc.use_reservation(prod[:sku], prod[:clienteId], resultP[:cant_mov])
+				#Gdoc.use_reservation(prod[:sku], prod[:clienteId], resultP[:cant_mov] + resultR[:cant_mov])
 			end
 
 		end   	
@@ -147,7 +148,7 @@ class Stock < ActiveRecord::Base
 	def self.pedirDespacho (almacen_id, sku, cantidad)
 		
 		cantidad_faltante = cantidad
-
+		Rails.logger.warn("Faltan #{cantidad} del producto #{sku}")
 		warehouses = []
     	warehouses << Warehouse2_api.new
     	#warehouses << Warehouse3_api.new
@@ -162,9 +163,10 @@ class Stock < ActiveRecord::Base
 
     	warehouses.each do |wh|
 	      	break if cantidad_faltante == 0
-
+	      	Rails.logger.warn("Encargando a Bodega #{wh.class}")
 	      	resultado = wh.get_prod(sku, cantidad_faltante, almacen_id)
 	      	if resultado >= 0
+	      		Rails.logger.warn("Bodega #{wh.class} envio #{resultado}")
 		        cantidad_faltante -= resultado
 		    else
 		        Rails.logger.warn("Bodega #{wh.class} con problemas")
