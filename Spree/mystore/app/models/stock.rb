@@ -60,7 +60,7 @@ class Stock < ActiveRecord::Base
 			      	if !prod.include?(:api)
 			      		cantPedir = prod[:cant].to_i - stockPrincipal #- stockRecepcion
 		    			cantRecibida = pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
-		    			movStockSku (almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida)
+		    			movStockSku(almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida)
 		    			if cantRecibida < cantPedir
 		    				su[:success] = false
 		    				reason[prod[:sku]] = {:reason => "No existe suficiente stock del producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
@@ -84,7 +84,7 @@ class Stock < ActiveRecord::Base
 		      	if !prod.include?(:api)
 		      		cantPedir = prod[:cant].to_i - stockPrincipal #- stockRecepcion
 		    		cantRecibida = pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
-		    		movStockSku (almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida)
+		    		movStockSku(almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida)
 		    		if cantRecibida < cantPedir
 		    			su[:success] = false
 		    			reason[prod[:sku]] = {:reason => "No existe en bodega el producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
