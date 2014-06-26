@@ -10,7 +10,8 @@ namespace :my_namespace do
 
   desc "TODO"
   task my_task3: :environment do
-    puts "Inicio"
+    puts "\nInicio"
+    puts DateTime.now
     puts Rabbitmpq.leerReposicion
     puts "1"
     puts Rabbitmpq.leerOferta
@@ -25,6 +26,8 @@ namespace :my_namespace do
 
   desc "TODO"
   task my_task10: :environment do
+    puts "\nInicio"
+    puts DateTime.now
     puts Schedule.new_orders
     puts "Ordenes Revisadas y Actualizadas"
     puts Schedule.main
@@ -33,6 +36,8 @@ namespace :my_namespace do
 
   desc "TODO"
   task my_task60: :environment do
+    puts "\nInicio"
+    puts DateTime.now
     puts Schedule.delivery
     puts "Ordenes despachadas"
     puts Stock.vaciarAlmacenRecepcion
@@ -41,6 +46,8 @@ namespace :my_namespace do
 
   desc "TODO"
   task my_taskDia: :environment do
+    puts "\nInicio"
+    puts DateTime.now
     puts Schedule.new_product
     puts "Productos revisados"
     puts Schedule.new_reservations
