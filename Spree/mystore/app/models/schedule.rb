@@ -72,7 +72,7 @@ class Schedule < ActiveRecord::Base
 					end
 				end	
 			else
-				FileOrder.update(:delivered => true)
+				file.update(:delivered => true)
 			end
 		end
 		return "Delivery correcto"
