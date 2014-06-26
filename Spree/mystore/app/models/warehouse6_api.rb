@@ -10,8 +10,8 @@ class Warehouse6_api
   def get_prod(sku, cantidad, almacen_id)
   	begin
   	respjson = request(sku,cantidad,almacen_id)
-	  if !respjson.include?(:error) && respjson.include?(:cantidad)
-		  return respjson[:cantidad].to_i
+	  if !respjson[0].include?(:error) && respjson[0].include?(:cantidad)
+		  return respjson[0][:cantidad].to_i
 	  else 
 		  return -1
 	  end

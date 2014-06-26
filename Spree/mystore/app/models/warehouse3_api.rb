@@ -23,7 +23,8 @@ class Warehouse3_api
 
   def request(sku, cantidad, almacen_id)
   	url =  "http://integra3.ing.puc.cl/api/pedirProducto"
-	return response = HTTParty.post(url,:body => { :usuario => @@user, :password => @@password, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
+	  response = HTTParty.post(url,:body => { :usuario => @@user, :password => @@password, :almacen_id => almacen_id, :SKU => sku, :cantidad => cantidad })
+    return JSON.parse(response.body, symbolize_names: true)
   end
 
 end

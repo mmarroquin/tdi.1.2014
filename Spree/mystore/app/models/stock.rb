@@ -154,7 +154,7 @@ class Stock < ActiveRecord::Base
     	#warehouses << Warehouse3_api.new
     	warehouses << Warehouse4_api.new
     	warehouses << Warehouse5_api.new
-    	#warehouses << Warehouse6_api.new
+    	warehouses << Warehouse6_api.new
     	#warehouses << Warehouse7_api.new
     	warehouses << Warehouse8_api.new
     	warehouses << Warehouse9_api.new
