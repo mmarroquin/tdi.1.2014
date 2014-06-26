@@ -83,12 +83,8 @@ class Schedule < ActiveRecord::Base
 
 	def self.new_orders
 		#Revisar nuevos pedidos desde FTP - Ingresar nuevos pedidos
-		begin
-		Sftp.orders
-		return "Revision correcta"
-		rescue
-			return "Error en el metodo"
-		end
+		return Sftp.orders + ", Revision correcta"
+		
 	end
 
 	def self.new_reservations

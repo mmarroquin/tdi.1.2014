@@ -62,7 +62,7 @@ class Sftp < ActiveRecord::Base
       end
       
      end
-     
+     return "Termino"
   	end
 
   	def self.csv
