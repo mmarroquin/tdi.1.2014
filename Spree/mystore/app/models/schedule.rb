@@ -51,7 +51,7 @@ class Schedule < ActiveRecord::Base
 
 	def self.delivery
 		begin
-		@ordenesADespachar = FileOrder.all(:conditions => ['processed = ? AND dilevered = ? AND deliveryDate <= ?', true, false, Date.current])
+		@ordenesADespachar = FileOrder.where(['processed = ? AND delivered = ? AND deliveryDate <= ?', true, false, Date.current])
 		#FileOrder.where(:processed => true, :success => true, :delivered => false, :deliveryDate )
 		@ordenesADespachar.each do |file|
 			producto = []

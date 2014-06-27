@@ -59,7 +59,7 @@ class Stock < ActiveRecord::Base
 			      	if !prod.include?(:api)
 			      		cantPedir = prod[:cant].to_i - stockPrincipal #- stockRecepcion
 		    			cantRecibida = pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
-		    			movStockSku(almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida)
+		    			movStockSku(almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida, false)
 		    			if cantRecibida < cantPedir
 		    				su[:success] = false
 		    				reason[prod[:sku]] = {:reason => "No existe suficiente stock del producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
@@ -83,7 +83,7 @@ class Stock < ActiveRecord::Base
 		      	if !prod.include?(:api)
 		      		cantPedir = prod[:cant].to_i - stockPrincipal #- stockRecepcion
 		    		cantRecibida = pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
-		    		movStockSku(almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida)
+		    		movStockSku(almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida, false)
 		    		if cantRecibida < cantPedir
 		    			su[:success] = false
 		    			reason[prod[:sku]] = {:reason => "No existe en bodega el producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
@@ -122,7 +122,7 @@ class Stock < ActiveRecord::Base
 				#cantProdRecepcion = cantidadProd - cantProdPrincipal
 			end
 
-			resultP = movStockSku(almacenPrincipal_id, almacenEspera_id, prod[:sku], cantProdPrincipal)
+			resultP = movStockSku(almacenPrincipal_id, almacenEspera_id, prod[:sku], cantProdPrincipal, false)
 			#resultR = movStockSku(almacenRecepcion_id, almacenEspera_id, prod[:sku], cantProdRecepcion)
 			
 			if resultP.include?(:error)
@@ -192,27 +192,29 @@ class Stock < ActiveRecord::Base
 	    cantidadesMov = Hash.new
 	    cantidadesMov[:total] = 0
 	    productos.each do |prod| 
-
-	    	price_prod = Product.last(:select => "products.price", :conditions => ['start_date <= ? AND final_date >= ? AND sku = ?', Date.current, Date.current, prod[:sku] ])
-		    if price_prod == nil
-		    	price_prod = WebProduct.last(:select => "web_products.price_normal", :conditions => ['sku = ?', prod[:sku] ])
-		    	if price_prod ==nil
-		    		price_prod = 0
+	    	
+	    	aux = Product.where(['start_date <= ? AND final_date >= ? AND sku = ?', Date.current, Date.current, prod[:sku] ]).select(:price).last
+		    if aux == nil
+		    	aux = WebProduct.where(['sku = ?', prod[:sku] ]).select(:price_normal).last
+		    	if aux ==nil
+		    		price_prod = "0"
+		    	else
+		    		price_prod = aux[:price_normal]
 		    	end
+		    else
+		    	price_prod = aux[:price]
 		    end
 		    cantidadProd = prod[:cant].to_i
 		    if responseEspera.find { |producto| producto['_id'] == prod[:sku] }
-				url = "http://bodega-integracion-2014.herokuapp.com/stock"
-				authorizationStockD = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "GET" + almacenEspera_id + prod[:sku]))
-		    	responseStockD = HTTParty.get(url,:query => { :almacenId => almacenEspera_id, :sku => prod[:sku], :limit => cantidadProd },:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationStockD})
-
+				
+				responseStockD= getSkusUn(almacenEspera_id, prod[:sku], cantidadProd)
 		    	prod[:cant_mov] = 0
 		    
 		    	responseStockD.each do |prodUnidad|
 		    		movStockUn(almacenDespacho_id, prodUnidad["_id"])
 
-					authorizationEnv = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "DELETE" + prodUnidad["_id"] + direccion + price_prod + pedido_id))
-		    		responseEnv = HTTParty.delete(url,:body => { :productoId => prodUnidad["_id"], :direccion => direccion, :precio => price_prod, :pedidoId => pedido_id },:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationEnv})
+					authorizationEnv = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "DELETE" + prodUnidad["_id"] + direccion + price_prod + pedidoId))
+		    		responseEnv = HTTParty.delete(url,:body => { :productoId => prodUnidad["_id"], :direccion => direccion, :precio => price_prod, :pedidoId => pedidoId },:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationEnv})
 		    		
 		    		if responseEnv.include?("error")
 			    		reason[:success] = false
@@ -287,7 +289,7 @@ class Stock < ActiveRecord::Base
 
 	    cantidadesMov = 0
 	    response.each do |producto|
-	    	cantidadesMov += movStockSku(origen, destino, producto["_id"], 0)[:cant_mov]
+	    	cantidadesMov += movStockSku(origen, destino, producto["_id"], 0, false)[:cant_mov]
 	    	if cantidadesMov >= limit
 	    		break
 	    	end
@@ -297,14 +299,18 @@ class Stock < ActiveRecord::Base
 	end
 
 
-	def self.movStockSku (origen, destino, sku, limit)
+	def self.movStockSku (origen, destino, sku, limit, api)
 		cantidadesMov = {:sku => sku, :cant_mov => 0 }
-	    url = "http://bodega-integracion-2014.herokuapp.com/stock"
-		authorizationStock = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "GET" + origen + sku))
-		responseStock = HTTParty.get(url,:query => { :almacenId => origen, :sku => sku, :limit => limit},:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationStock})
-		
+		responseStock = getSkusUn(origen, sku, limit)
+	    
 		responseStock.each do |prodUnidad|
-			if error = movStockUn(destino, prodUnidad["_id"])
+			if api
+				error = movStockUnAPI(destino, prodUnidad["_id"])
+			else
+				error = movStockUn(destino, prodUnidad["_id"])
+			end
+			
+			if error != nil
 				cantidadesMov[:error] = error
 				return cantidadesMov
 			end
@@ -322,6 +328,14 @@ class Stock < ActiveRecord::Base
 		return responseMovi["error"]
 	end
 
+	def self.movStockUnAPI (destino, id)
+		url = "http://bodega-integracion-2014.herokuapp.com/moveStockBodega"
+		authorizationMovi = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "POST" + id + destino))
+		responseMovi = HTTParty.post(url,:body => { :productoId => id, :almacenId => destino },:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationMovi})
+		    	
+		return responseMovi["error"]
+	end
+
 	def self.getDepots
 		authorization = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "GET"))
 	    url = "http://bodega-integracion-2014.herokuapp.com/almacenes"
@@ -332,6 +346,12 @@ class Stock < ActiveRecord::Base
 		url = "http://bodega-integracion-2014.herokuapp.com/skusWithStock"
 	    authorization = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "GET" + almacenId))
 	    response = HTTParty.get(url,:query => { :almacenId => almacenId },:headers => { "Authorization" => "UC "+ @@user + ":" + authorization})
+	end
+
+	def self.getSkusUn(almacenId, sku, limit)
+		url = "http://bodega-integracion-2014.herokuapp.com/stock"
+		authorization = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "GET" + almacenId + sku))
+		response = HTTParty.get(url,:query => { :almacenId => almacenId, :sku => sku, :limit => limit },:headers => { "Authorization" => "UC "+ @@user + ":" + authorization})
 	end
 
 end
