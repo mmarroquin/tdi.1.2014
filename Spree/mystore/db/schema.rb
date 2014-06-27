@@ -19,12 +19,17 @@ ActiveRecord::Schema.define(version: 20140623182417) do
   end
 
   create_table "file_orders", force: true do |t|
+    t.datetime "orderDate"
+    t.date     "deliveryDate"
+    t.integer  "quantity"
     t.string   "no_order"
-    t.string   "date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.string   "rut"
     t.string   "direcc_id"
+    t.boolean  "processed"
+    t.boolean  "delivered"
+    t.boolean  "success"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "gdocs", force: true do |t|
@@ -48,6 +53,7 @@ ActiveRecord::Schema.define(version: 20140623182417) do
     t.string   "id_order"
     t.string   "sku_order"
     t.string   "quantity"
+    t.boolean  "delivered"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "broked"
@@ -90,7 +96,7 @@ ActiveRecord::Schema.define(version: 20140623182417) do
     t.date     "date"
     t.string   "client"
     t.integer  "amount"
-    t.boolean  "used"
+    t.integer  "used"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
