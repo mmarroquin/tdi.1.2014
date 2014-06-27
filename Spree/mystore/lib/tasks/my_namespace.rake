@@ -22,6 +22,9 @@ namespace :my_namespace do
     puts "4"
     puts Reposicion.reponer
     puts "Termino"
+    puts "M1"
+    Gdoc.obtain_info
+    puts "M2"
   end
 
   desc "Tareas cada 10 minutos"
