@@ -206,10 +206,8 @@ class Stock < ActiveRecord::Base
 		    end
 		    cantidadProd = prod[:cant].to_i
 		    if responseEspera.find { |producto| producto['_id'] == prod[:sku] }
-				url = "http://bodega-integracion-2014.herokuapp.com/stock"
-				authorizationStockD = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "GET" + almacenEspera_id + prod[:sku]))
-		    	responseStockD = HTTParty.get(url,:query => { :almacenId => almacenEspera_id, :sku => prod[:sku], :limit => cantidadProd },:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationStockD})
-
+				
+				responseStockD= getSkusUn(almacenEspera_id, prod[:sku], cantidadProd)
 		    	prod[:cant_mov] = 0
 		    
 		    	responseStockD.each do |prodUnidad|
@@ -303,10 +301,8 @@ class Stock < ActiveRecord::Base
 
 	def self.movStockSku (origen, destino, sku, limit, api)
 		cantidadesMov = {:sku => sku, :cant_mov => 0 }
-	    url = "http://bodega-integracion-2014.herokuapp.com/stock"
-		authorizationStock = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "GET" + origen + sku))
-		responseStock = HTTParty.get(url,:query => { :almacenId => origen, :sku => sku, :limit => limit},:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationStock})
-		
+		responseStock = getSkusUn(origen, sku, limit)
+	    
 		responseStock.each do |prodUnidad|
 			if api
 				error = movStockUnAPI(destino, prodUnidad["_id"])
@@ -350,6 +346,12 @@ class Stock < ActiveRecord::Base
 		url = "http://bodega-integracion-2014.herokuapp.com/skusWithStock"
 	    authorization = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "GET" + almacenId))
 	    response = HTTParty.get(url,:query => { :almacenId => almacenId },:headers => { "Authorization" => "UC "+ @@user + ":" + authorization})
+	end
+
+	def self.getSkusUn(almacenId, sku, limit)
+		url = "http://bodega-integracion-2014.herokuapp.com/stock"
+		authorization = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "GET" + almacenId + sku))
+		response = HTTParty.get(url,:query => { :almacenId => almacenId, :sku => sku, :limit => limit },:headers => { "Authorization" => "UC "+ @@user + ":" + authorization})
 	end
 
 end
