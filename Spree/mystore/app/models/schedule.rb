@@ -3,6 +3,7 @@ class Schedule < ActiveRecord::Base
 
 	def self.main
 		begin
+		count = 0
 		@ordenesAProcesar = FileOrder.where(:processed => false)
 		@ordenesAProcesar.each do |file|
 			producto = []
@@ -28,18 +29,21 @@ class Schedule < ActiveRecord::Base
 					end
 					#despacho[0] = Stock.despachar(producto, direccion, file.no_order)
 				end
-				Stock.prepareStock(producto)
+				response2 = Stock.prepareStock(producto)
 				producto.each do |prod|
 					totalQuantity += prod[:cant]
 				end
 				DataWarehouse::FileOrder.create(client_id: file.rut, order_id: file.no_order, address: direccion, quantity: totalQuantity, success: hay_stock, deliveryDate: file.deliveryDate, orderDate: file.orderDate)
 			end
-
+			count += 1
+			if response2.include?(:error)
+				break
+			end
 			#Report.create(:n_pedido => file.no_order, :despachado => despacho, :quiebre => hay_stock, :fecha => file.no_order)
 		end
-		return "Proceso de pedidos correcto"
+		return "Proceso de pedidos correcto. Se procesaron #{count} pedidos."
 		rescue
-			return "Error en el metodo"
+			return "Error en el metodo."
 		end
 	end
 
@@ -52,6 +56,10 @@ class Schedule < ActiveRecord::Base
 
 	def self.delivery
 		begin
+		depots = Stock.getDepots
+	    almacenPrincipal_id = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first["_id"]
+	    almacenEspera_id = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.last["_id"]
+		
 		@ordenesADespachar = FileOrder.where(['processed = ? AND delivered = ? AND deliveryDate <= ?', true, false, Date.current])
 		#FileOrder.where(:processed => true, :success => true, :delivered => false, :deliveryDate )
 		@ordenesADespachar.each do |file|
@@ -69,6 +77,8 @@ class Schedule < ActiveRecord::Base
 							orden.delivered = true
 							DataWarehouse::DeliveredProduct.create(client_id: file.rut, order_id: file.no_order, sku: orden.sku_order, address: direccion, quantitySent: response[1][:total] , deliveryDate: Date.current)
 							Report.create(:n_pedido => file.no_order, :despachado => orden.delivered)
+						else
+							movStockSku(almacenPrincipal_id, almacenEspera_id, orden.sku_order, orden.quantity, false)
 						end
 					end
 				end	
