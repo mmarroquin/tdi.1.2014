@@ -215,8 +215,8 @@ class Stock < ActiveRecord::Base
 		    	responseStockD.each do |prodUnidad|
 		    		movStockUn(almacenDespacho_id, prodUnidad["_id"])
 
-					authorizationEnv = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "DELETE" + prodUnidad["_id"] + direccion + price_prod + pedido_id))
-		    		responseEnv = HTTParty.delete(url,:body => { :productoId => prodUnidad["_id"], :direccion => direccion, :precio => price_prod, :pedidoId => pedido_id },:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationEnv})
+					authorizationEnv = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "DELETE" + prodUnidad["_id"] + direccion + price_prod + pedidoId))
+		    		responseEnv = HTTParty.delete(url,:body => { :productoId => prodUnidad["_id"], :direccion => direccion, :precio => price_prod, :pedidoId => pedidoId },:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationEnv})
 		    		
 		    		if responseEnv.include?("error")
 			    		reason[:success] = false
