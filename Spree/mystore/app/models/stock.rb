@@ -59,7 +59,7 @@ class Stock < ActiveRecord::Base
 			      	if !prod.include?(:api)
 			      		cantPedir = prod[:cant].to_i - stockPrincipal #- stockRecepcion
 		    			cantRecibida = pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
-		    			movStockSku(almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida)
+		    			movStockSku(almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida, false)
 		    			if cantRecibida < cantPedir
 		    				su[:success] = false
 		    				reason[prod[:sku]] = {:reason => "No existe suficiente stock del producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
@@ -83,7 +83,7 @@ class Stock < ActiveRecord::Base
 		      	if !prod.include?(:api)
 		      		cantPedir = prod[:cant].to_i - stockPrincipal #- stockRecepcion
 		    		cantRecibida = pedirDespacho(almacenRecepcion_id, prod[:sku], cantPedir)
-		    		movStockSku(almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida)
+		    		movStockSku(almacenRecepcion_id, almacenPrincipal_id, prod[:sku], cantRecibida, false)
 		    		if cantRecibida < cantPedir
 		    			su[:success] = false
 		    			reason[prod[:sku]] = {:reason => "No existe en bodega el producto", :amount_asked => cantPedir, :amount_recieved => cantRecibida }
@@ -122,7 +122,7 @@ class Stock < ActiveRecord::Base
 				#cantProdRecepcion = cantidadProd - cantProdPrincipal
 			end
 
-			resultP = movStockSku(almacenPrincipal_id, almacenEspera_id, prod[:sku], cantProdPrincipal)
+			resultP = movStockSku(almacenPrincipal_id, almacenEspera_id, prod[:sku], cantProdPrincipal, false)
 			#resultR = movStockSku(almacenRecepcion_id, almacenEspera_id, prod[:sku], cantProdRecepcion)
 			
 			if resultP.include?(:error)
@@ -287,7 +287,7 @@ class Stock < ActiveRecord::Base
 
 	    cantidadesMov = 0
 	    response.each do |producto|
-	    	cantidadesMov += movStockSku(origen, destino, producto["_id"], 0)[:cant_mov]
+	    	cantidadesMov += movStockSku(origen, destino, producto["_id"], 0, false)[:cant_mov]
 	    	if cantidadesMov >= limit
 	    		break
 	    	end
@@ -297,14 +297,20 @@ class Stock < ActiveRecord::Base
 	end
 
 
-	def self.movStockSku (origen, destino, sku, limit)
+	def self.movStockSku (origen, destino, sku, limit, api)
 		cantidadesMov = {:sku => sku, :cant_mov => 0 }
 	    url = "http://bodega-integracion-2014.herokuapp.com/stock"
 		authorizationStock = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "GET" + origen + sku))
 		responseStock = HTTParty.get(url,:query => { :almacenId => origen, :sku => sku, :limit => limit},:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationStock})
 		
 		responseStock.each do |prodUnidad|
-			if error = movStockUn(destino, prodUnidad["_id"])
+			if api
+				error = movStockUnAPI(destino, prodUnidad["_id"])
+			else
+				error = movStockUn(destino, prodUnidad["_id"])
+			end
+			
+			if error != nil
 				cantidadesMov[:error] = error
 				return cantidadesMov
 			end
@@ -316,6 +322,14 @@ class Stock < ActiveRecord::Base
 
 	def self.movStockUn (destino, id)
 		url = "http://bodega-integracion-2014.herokuapp.com/moveStock"
+		authorizationMovi = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "POST" + id + destino))
+		responseMovi = HTTParty.post(url,:body => { :productoId => id, :almacenId => destino },:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationMovi})
+		    	
+		return responseMovi["error"]
+	end
+
+	def self.movStockUnAPI (destino, id)
+		url = "http://bodega-integracion-2014.herokuapp.com/moveStockBodega"
 		authorizationMovi = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "POST" + id + destino))
 		responseMovi = HTTParty.post(url,:body => { :productoId => id, :almacenId => destino },:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationMovi})
 		    	
