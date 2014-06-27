@@ -35,7 +35,7 @@ class Request < ActiveRecord::Base
 	    	else
 	    		reason[:message] = "No se pudo enviar todo. " + response2[:error]
 	    	end
-	    	Stock.movStockSku(almacenDespacho_id, almacenPrincipal_id, sku, cant-response2[:cant_mov])
+	    	Stock.movStockSku(almacenDespacho_id, almacenPrincipal_id, sku, cant-response2[:cant_mov], false)
 	    end
 	    reason[:amountSent] = response2[:cant_mov]
 	    return reason
