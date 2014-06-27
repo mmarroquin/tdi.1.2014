@@ -193,12 +193,16 @@ class Stock < ActiveRecord::Base
 	    cantidadesMov[:total] = 0
 	    productos.each do |prod| 
 	    	
-	    	price_prod = Product.where(['start_date <= ? AND final_date >= ? AND sku = ?', Date.current, Date.current, prod[:sku] ]).select(:price).last[:price]
-		    if price_prod == nil
-		    	price_prod = WebProduct.where(['sku = ?', prod[:sku] ]).select(:price_normal).last[:price_normal]
-		    	if price_prod ==nil
+	    	aux = Product.where(['start_date <= ? AND final_date >= ? AND sku = ?', Date.current, Date.current, prod[:sku] ]).select(:price).last
+		    if aux == nil
+		    	aux = WebProduct.where(['sku = ?', prod[:sku] ]).select(:price_normal).last
+		    	if aux ==nil
 		    		price_prod = "0"
+		    	else
+		    		price_prod = aux[:price_normal]
 		    	end
+		    else
+		    	price_prod = aux[:price]
 		    end
 		    cantidadProd = prod[:cant].to_i
 		    if responseEspera.find { |producto| producto['_id'] == prod[:sku] }
