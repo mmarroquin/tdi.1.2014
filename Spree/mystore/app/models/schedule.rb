@@ -45,12 +45,13 @@ class Schedule < ActiveRecord::Base
 
 	def self.prueba
 
-		a = DataWarehouse::DeliveredProduct.create(cliente_id: "5920406-8")
+		#a = DataWarehouse::DeliveredProduct.where(cliente_id: "5920406-8")
+		a = DataWarehouse::DeliveredProduct.first
 		puts a
 	end
 
 	def self.delivery
-		begin
+		#begin
 		@ordenesADespachar = FileOrder.where(['processed = ? AND delivered = ? AND deliveryDate <= ?', true, false, Date.current])
 		#FileOrder.where(:processed => true, :success => true, :delivered => false, :deliveryDate )
 		@ordenesADespachar.each do |file|
@@ -76,9 +77,9 @@ class Schedule < ActiveRecord::Base
 			end
 		end
 		return "Delivery correcto"
-		rescue
-			return "Error en el metodo"
-		end
+		#rescue
+		#	return "Error en el metodo"
+		#end
 	end
 
 	def self.new_orders
