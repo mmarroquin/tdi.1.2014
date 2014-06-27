@@ -47,7 +47,7 @@ class Dashboard < ActiveRecord::Base
 				:size => '400x200')
 			return grafico
 		else
-			return "La BD de productos o la BD de WebProductos está vacía"
+			return "La BD de productos o la BD de WebProductos esta vacia"
 		end
 	end
 
@@ -63,7 +63,7 @@ class Dashboard < ActiveRecord::Base
 				:size => '400x200')
 			return grafico
 		else
-			return "La BD de Reportes está vacía"
+			return "La BD de Reportes esta vacia"
 		end
 	end
 
