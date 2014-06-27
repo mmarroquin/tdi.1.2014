@@ -22,6 +22,9 @@ namespace :my_namespace do
     puts "4"
     #Reposicion.reponer
     puts "Termino"
+    puts "M1"
+    Gdoc.obtain_info
+    puts "M2"
   end
 
   desc "TODO"
