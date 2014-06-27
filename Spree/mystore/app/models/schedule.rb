@@ -45,7 +45,8 @@ class Schedule < ActiveRecord::Base
 
 	def self.prueba
 
-		a = DataWarehouse::DeliveredProduct.create(cliente_id: "5920406-8")
+		#a = DataWarehouse::DeliveredProduct.where(cliente_id: "5920406-8")
+		a = DataWarehouse::DeliveredProduct.first
 		puts a
 	end
 
