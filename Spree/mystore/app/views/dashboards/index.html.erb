@@ -8,9 +8,24 @@
       <th></th>
     </tr>
   </thead>
+  <center>
 <%= image_tag @graph %>
 <br>
 <%= image_tag @graph2 %>
+<br>
+<%= image_tag @graph3 %>
+<br>
+<%= image_tag @graph4 %>
+<br>
+<%= image_tag @graph5 %>
+<br>
+<% if @graph6 ==  "La BD de productos o la BD de WebProductos está vacía"%>
+  La BD de productos o la BD de WebProductos está vacía
+  <% else %>
+  <%= image_tag @graph6 %>
+  <% end %>
+
+</center>
   <tbody>
     <% @dashboards.each do |dashboard| %>
       <tr>

@@ -6,7 +6,11 @@ class DashboardsController < ApplicationController
   def index
     @dashboards = Dashboard.all
     @graph = Dashboard.plot
-    @graph2 = Dashboard.info
+    @graph2 = Dashboard.plot_reservations
+    @graph6 = Dashboard.plot_porcentaje_de_prods_online
+    @graph3 = Dashboard.plot_bar
+    @graph4 = Dashboard.plot_radar
+    @graph5 = Dashboard.plot_line
   end
 
   # GET /dashboards/1
