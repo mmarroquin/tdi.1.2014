@@ -192,10 +192,10 @@ class Stock < ActiveRecord::Base
 	    cantidadesMov = Hash.new
 	    cantidadesMov[:total] = 0
 	    productos.each do |prod| 
-
-	    	price_prod = Product.last(:select => "products.price", :conditions => ['start_date <= ? AND final_date >= ? AND sku = ?', Date.current, Date.current, prod[:sku] ])
+	    	
+	    	price_prod = Product.where(['start_date <= ? AND final_date >= ? AND sku = ?', Date.current, Date.current, prod[:sku] ]).select("price").last
 		    if price_prod == nil
-		    	price_prod = WebProduct.last(:select => "web_products.price_normal", :conditions => ['sku = ?', prod[:sku] ])
+		    	price_prod = WebProduct.where(['sku = ?', prod[:sku] ]).select("price_normal").last
 		    	if price_prod ==nil
 		    		price_prod = 0
 		    	end
