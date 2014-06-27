@@ -9,13 +9,13 @@ class Dashboard < ActiveRecord::Base
 		return grafico
 	end
 
-	def self.info
-		grafico = Gchart.pie_3d(:title => "Fancy title",
-			:labels => ["Fancy entry", "Fancy entry2", "Whatever"],
-			:data => [200,350,100],
-			:size => '400x200')
-		return grafico
-	end
+#	def self.info
+#		grafico = Gchart.pie_3d(:title => "Fancy title",
+#			:labels => ["Fancy entry", "Fancy entry2", "Whatever"],
+#			:data => [200,350,100],
+#			:size => '400x200')
+#		return grafico
+#	end
 
 	def self.plot_reservations
 		total_date = Reservation.count
@@ -65,27 +65,27 @@ class Dashboard < ActiveRecord::Base
 		else
 			return "La BD de Reportes está vacía"
 		end
-
-	def self.plot_bar
-		grafico = Gchart.bar( :data => [[1,2,4,67,100,41,234],[45,23,67,12,67,300, 250]], 
-            :title => 'SD Ruby Fu level', 
-            :legend => ['matt','patrick'],  
-            :bar_colors => 'ff0000,00ff00',
-            :size => '400x200')
-		return grafico
 	end
 
-	def self.plot_radar
-		grafico = Gchart.radar(:data => [1,2,4,67,100,41,234], :curved => true)
-		return grafico
-	end
+#	def self.plot_bar
+#		grafico = Gchart.bar( :data => [[1,2,4,67,100,41,234],[45,23,67,12,67,300, 250]], 
+ #           :title => 'SD Ruby Fu level', 
+  #          :legend => ['matt','patrick'],  
+   #         :bar_colors => 'ff0000,00ff00',
+    #        :size => '400x200')
+	#	return grafico
+	#end
 
-	def self.plot_line
-		grafico = Gchart.line( :data => [17, 17, 11, 8, 2], 
-              :axis_with_labels => ['x', 'y'], 
-              :axis_labels => [['J', 'F', 'M', 'A', 'M']], 
-              :axis_range => [nil, [2,17,5]])
-		return grafico
-	end
+#	def self.plot_radar
+#		grafico = Gchart.radar(:data => [1,2,4,67,100,41,234], :curved => true)
+#		return grafico
+#	end
 
+#	def self.plot_line
+#		grafico = Gchart.line( :data => [17, 17, 11, 8, 2], 
+ #             :axis_with_labels => ['x', 'y'], 
+  #            :axis_labels => [['J', 'F', 'M', 'A', 'M']], 
+   #           :axis_range => [nil, [2,17,5]])
+	#	return grafico
+	#end
 end

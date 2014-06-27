@@ -10,20 +10,20 @@
   </thead>
   <center>
 <%= image_tag @graph %>
-<br>
+<br><hr>
 <%= image_tag @graph2 %>
-<br>
-<%= image_tag @graph3 %>
-<br>
-<%= image_tag @graph4 %>
-<br>
-<%= image_tag @graph5 %>
-<br>
+<br><hr>
+<% if @graph7 ==  "La BD de Reportes está vacía"%>
+  La BD de Reportes está vacía
+<% else %>
+  <%= image_tag @graph7 %>
+<% end %>
+<br><hr>
 <% if @graph6 ==  "La BD de productos o la BD de WebProductos está vacía"%>
   La BD de productos o la BD de WebProductos está vacía
-  <% else %>
+<% else %>
   <%= image_tag @graph6 %>
-  <% end %>
+<% end %>
 
 </center>
   <tbody>
