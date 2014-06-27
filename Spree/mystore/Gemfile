@@ -93,3 +93,10 @@ gem 'bunny'
 gem 'googlecharts'
 
 gem 'twitter'
+
+gem 'mongoid', '~> 4.0.0.beta1', git: 'https://github.com/mongoid/mongoid'
+gem 'moped'
+gem 'bson'
+gem 'bson_ext'
+
+#gem 'versionist'

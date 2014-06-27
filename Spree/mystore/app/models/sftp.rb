@@ -16,30 +16,37 @@ class Sftp < ActiveRecord::Base
         begin
         	n_pedido = remote_file.name.split("_")[1].split(".")[0]
         rescue
+        	return "Termino"
         end
         if count > 2
 	    #    begin
-	    	datas << remote_file.name
+	    	if not FileOrder.exists?(:no_order => n_pedido) #and false
+	    	  datas << remote_file.name
+	          
 	          xml_str = file.read
 	          doc = Nokogiri::XML(xml_str)
-	          thing = doc.xpath("//Pedido")
-	          fecha = doc.xpath("//fecha").map{ |node| node.text.strip }
-	          rut = doc.xpath("//rut").map{ |node| node.text.strip }
-	          direc_id = doc.xpath("//direccionId").map{ |node| node.text.strip }
+	          orders = doc.at_xpath("//Pedidos")
 
+    		  fecha = orders.attr("fecha")
+              hora = orders.attr("hora")
+	          fechaDespacho = orders.at_xpath("fecha").content.strip
+	          rut = orders.at_xpath("rut").content.strip
+	          direc_id = orders.at_xpath("direccionId").content.strip
+
+	          thing = doc.xpath("//Pedido")
 	          chld = thing.map do |node|
 	            node.children.map{ |n| [n.name, n.text.strip] if n.elem? }.compact
 	          end.compact
-	          if not FileOrder.exists?(:no_order => n_pedido) #and false
-	         	FileOrder.create(:date => fecha[0], :no_order => n_pedido, :rut => rut[0], :direcc_id =>direc_id[0])
+	          
+	          FileOrder.create(:orderDate => DateTime.parse(fecha + " " + hora), :deliveryDate => fechaDespacho, :quantity => 0, :no_order => n_pedido, :rut => rut, :direcc_id =>direc_id, :processed => false, :delivered => false, :success => false)
 	          	
-	      	    chld.each do |ord|
-	      	    	sku = ord[0][1]
-	      	    	aux = ord
-	      	    	quantity = ord[1][1]
-	                Order.create(:id_order => n_pedido, :quantity => quantity, :sku_order => sku)
-	        	end
+	      	  chld.each do |ord|
+	      	    sku = ord[0][1]
+	      	    aux = ord
+	      	    quantity = ord[1][1]
+	            Order.create(:id_order => n_pedido, :quantity => quantity, :sku_order => sku, :delivered => false, :broked => false)
 	          end
+	        end
 	          #chld = 1
 	     #   rescue
 	      
@@ -55,7 +62,7 @@ class Sftp < ActiveRecord::Base
       end
       
      end
-     
+     return "Termino"
   	end
 
   	def self.csv

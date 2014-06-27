@@ -1,60 +1,45 @@
 class Request < ActiveRecord::Base
 	
 
-	def self.pedirProducto (almacenId, sku, cant)
+	def self.pedirProducto (sku, cant, almacenId)
 		cliente_id = ""
 		
 		aux = [{:sku => sku, :cant => cant, :clienteId => cliente_id, :api => true}]
 		respuesta = Stock.getStock(aux)
-		if respuesta[:success]
-			return enviarABodega(aux, almacenId)
+		if respuesta[0][:success]
+			return enviarABodega(almacenId, sku, cant.to_i)
 	
 		else
-			su["success"] = respuesta[:success]
-			cantidadMov["cantMov"] = 0
-			return su, cantidadMov, respuesta[:reason]
+			reason = {:success => respuesta[0][:success], :amountSent => 0, :error => "No es posible procesar el pedido. " + respuesta[1][sku]}
+			return reason
 		end
 
 	end
 
-	def self.enviarABodega(productos, almacenId)
-		s["success"] = true
-	    user = "grupo1"
-	    password = "OuyMG5aD"
-	    authorization = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET"))
-	    url = "http://bodega-integracion-2014.herokuapp.com/almacenes"
-	    response = HTTParty.get(url,:headers => { "Authorization" => "UC "+ user + ":" + authorization})
-	    
-	    almacenDespacho_id = response.find { |almacen| almacen['despacho'] == true }["_id"]
+	def self.enviarABodega(almacenId, sku, cant)
+		reason = Hash.new
+		reason[:success] = true
+		reason[:message] = "Se envio todo"
+		reason[:sku] = sku
 
+	    depots = Stock.getDepots
+	    almacenDespacho_id = depots.find { |almacen| almacen['despacho'] == true }["_id"]
+	    almacenPrincipal_id = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first["_id"]
+	  
+	  	response1 = Stock.movStockSku(almacenPrincipal_id, almacenDespacho_id, sku, cant)
+	    response2 = Stock.movStockSku(almacenDespacho_id, almacenId, sku, response1[:cant_mov])
+	    if response1.include?(:error) || response2.include?(:error) 
+	    	reason[:success] = false
+	    	if response1.include?(:error)
+	    		reason[:message] = "No se pudo enviar todo. " + response1[:error]
+	    	else
+	    		reason[:message] = "No se pudo enviar todo. " + response2[:error]
+	    	end
+	    	#Stock.movStockSku(almacenEspera_id, almacenPrincipal_id, sku, cant-response[:cant_mov])
+	    end
+	    reason[:amountSent] = response[:cant_mov]
+	    return reason
 
-	    cantidadMov["cantMov"] = 0
-	    productos.each do |prod| 
-
-		    cantidadProd = prod[:cant].to_i
-				
-			url = "http://bodega-integracion-2014.herokuapp.com/stock"
-			authorizationStockD = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "GET" + almacenDespacho_id + prod[:sku]))
-		    responseStockD = HTTParty.get(url,:query => { :almacenId => almacenDespacho_id, :sku => prod[:sku], :limit => cantidadProd },:headers => { "Authorization" => "UC "+ user + ":" + authorizationStockD})
-
-		    url = "http://bodega-integracion-2014.herokuapp.com/moveStockBodega"
-		    responseStockD.each do |prodUnidad|
-				authorizationEnv = Base64.encode64(OpenSSL::HMAC.digest('sha1', password, "POST" + prodUnidad["_id"] + almacenId))
-		    	responseEnv = HTTParty.post(url,:body => { :productoId => prodUnidad["_id"], :almacenId => almacenId },:headers => { "Authorization" => "UC "+ user + ":" + authorizationEnv})
-		    		
-		    	if responseEnv.include?("error")
-			    	s["success"] = false
-			    else
-			    	cantidadMov["cantMov"] += 1
-		    	end 
-		    		
-		    end			    	 
-		    
-
-		end
-
-		return s, cantidadMov
-				
 	end 
 
 
