@@ -14,7 +14,8 @@ Mystore::Application.routes.draw do
 
   resources :gdocs
 
-
+  resources :maps
+  
   resources :sftps
 
   #resources :products
