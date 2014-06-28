@@ -156,10 +156,32 @@ class Dashboard < ActiveRecord::Base
 				end
 			end
 		end
+
+		aux_a = []
+		aux_b = []
+
+		i = 0
+		iteraciones = 5
+		while i < iteraciones do
+			if i < iteraciones -1
+				index = 0
+				index = b.index(b.max)
+				aux_a << a[index]
+				aux_b << b[index]
+
+				a.delete_at(index)
+				b.delete_at(index)
+			else
+				aux_a << "Otros"
+				aux_b << b.inject{|sum, x| sum + x}
+				
+		end
+
+
 		grafico = Gchart.bar(:title => "Ventas por categoria de producto",
-			:labels => a,
-			:data => b)
-		puts a.count
+			:labels => aux_a,
+			:data => aux_b)
+		
 		return grafico
 	end
 
