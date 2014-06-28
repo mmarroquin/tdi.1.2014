@@ -9,6 +9,7 @@ class DashboardsController < ApplicationController
     @graph2 = Dashboard.plot_reservations
     @graph6 = Dashboard.plot_porcentaje_de_prods_online
     @graph7 = Dashboard.plot_porcentaje_de_despachos_quebrados
+    @graph8 = Dashboard.plot_ofertas
 #    @graph3 = Dashboard.plot_bar
 #    @graph4 = Dashboard.plot_radar
 #    @graph5 = Dashboard.plot_line

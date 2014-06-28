@@ -9,6 +9,19 @@ class Stock < ActiveRecord::Base
   	@@user = "grupo1"
 	@@password = "OuyMG5aD"
 
+	def self.getStockSku(sku)
+		depots = getDepots
+		almacenPrincipal = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first
+		almacenPrincipal_id = almacenPrincipal["_id"]
+		responsePrincipal = getSkus(almacenPrincipal_id) 
+		if responsePrincipal.find { |producto| producto['_id'] == sku } #|| responseRecepcion.find { |producto| producto['_id'] == prod[:sku] }
+
+		    if prodActual = responsePrincipal.find { |producto| producto['_id'] == sku }
+		        return stockPrincipal = prodActual["total"]
+			        
+		    end
+		end
+	end
 
   	def self.getStock(productos)
 		reason = Hash.new
