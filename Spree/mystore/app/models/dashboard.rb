@@ -76,13 +76,13 @@ class Dashboard < ActiveRecord::Base
 		Offer.all.each do |o|
 			sku = o.sku
 			arreglo = Order.find_by_sku_order(sku)
-			if arreglo.count > 0
+			if arreglo.length > 0
 				encontrado = false
 				if (not encontrado)
 					arreglo.each do a
 						id = a.id_order
 						orden = FileOrder.find_by_no_order(id)
-						if orden.count > 0
+						if orden.length > 0
 							if orden.orderDate > o.inicio and orden.orderDate < o.fin and (not encontrado)
 								total = total+1
 								encontrado = true
