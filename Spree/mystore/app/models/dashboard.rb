@@ -184,8 +184,8 @@ class Dashboard < ActiveRecord::Base
 
 
 		grafico = Gchart.bar(:title => "Ventas por categoria de producto",
-			:labels => aux_a,
-			:data => aux_b)
+			:labels => aux_a[0..a.count-2],
+			:data => aux_b[0..a.count-2])
 		
 		return grafico
 	end
