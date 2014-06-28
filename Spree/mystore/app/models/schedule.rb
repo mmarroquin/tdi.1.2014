@@ -78,7 +78,7 @@ class Schedule < ActiveRecord::Base
 							DataWarehouse::DeliveredProduct.create(client_id: file.rut, order_id: file.no_order, sku: orden.sku_order, address: direccion, quantitySent: response[1][:total] , deliveryDate: Date.current)
 							Report.create(:n_pedido => file.no_order, :despachado => orden.delivered)
 						else
-							movStockSku(almacenPrincipal_id, almacenEspera_id, orden.sku_order, orden.quantity, false)
+							movStockSku(almacenPrincipal_id, almacenEspera_id, orden.sku_order, orden.quantity.to_i, false)
 						end
 					end
 				end	
