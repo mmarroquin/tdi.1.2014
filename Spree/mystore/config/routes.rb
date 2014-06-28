@@ -17,7 +17,7 @@ Mystore::Application.routes.draw do
 
   resources :sftps
 
-  resources :products
+  #resources :products
 
   get "elcontrolador/elmetodo"
   get "greetings/hello"
