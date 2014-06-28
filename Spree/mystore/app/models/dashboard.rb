@@ -44,7 +44,7 @@ class Dashboard < ActiveRecord::Base
 			grafico = Gchart.pie_3d(:title => "Porcentaje de productos publicados online vs no disponibles online",
 				:labels => ["Disponible online", "No disponible desde la web"],
 				:data => [total_online,dif],
-				:size => '400x200')
+				:size => '600x200')
 			return grafico
 		else
 			return "La BD de productos o la BD de WebProductos esta vacia"
