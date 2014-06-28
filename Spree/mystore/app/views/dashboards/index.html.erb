@@ -9,8 +9,6 @@
     </tr>
   </thead>
   <center>
-<%= image_tag @graph %>
-<br><hr>
 <%= image_tag @graph2 %>
 <br><hr>
 <% if @graph7 ==  "La BD de Reportes esta vacia"%>
@@ -25,19 +23,5 @@
   <%= image_tag @graph6 %>
 <% end %>
 
-</center>
-  <tbody>
-    <% @dashboards.each do |dashboard| %>
-      <tr>
-        <td><%= link_to 'Show', dashboard %></td>
-        <td><%= link_to 'Edit', edit_dashboard_path(dashboard) %></td>
-        <td><%= link_to 'Destroy', dashboard, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
 <br>
-
-<!--<%= link_to 'Mapa Pedidos Despachados', maps_path, 'data-no-turbolink' => true%>-->
-<!-- <%= link_to 'New Dashboard', new_dashboard_path %> -->
