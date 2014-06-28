@@ -174,6 +174,7 @@ class Dashboard < ActiveRecord::Base
 			else
 				aux_a << "Otros"
 				aux_b << b.inject{|sum, x| sum + x}
+			end
 				
 		end
 
