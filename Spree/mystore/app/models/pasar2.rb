@@ -1,7 +1,7 @@
 class Pasar2 < ActiveRecord::Base
 
   
-  def self.Spree
+  def self.pasarSpree
 		puts "A"
 		
 		string = '{"desc":{"someKey":"someValue","anotherKey":"value"},"main_item":{"stats":{"a":8,"b":12,"c":10}}}'
@@ -12,11 +12,9 @@ class Pasar2 < ActiveRecord::Base
 		puts "c2"
 		puts texto
 		for i in 0...texto.length
-  		if not producto = Spree::Variant.find_by_sku(texto[i]['sku'])
     		p = Spree::Product.create :name => texto[i]['modelo'], :price => texto[i]['precio']['internet'], :description => texto[i]['descripcion'], :sku => texto[i]['sku'], :shipping_category_id => 1, :available_on => Time.now
     		img = Spree::Image.create(:attachment => open(texto[i]['imagen']), :viewable => p.master)
     		puts "i1"
-    		end
   		end
 		puts "B"
 		end
