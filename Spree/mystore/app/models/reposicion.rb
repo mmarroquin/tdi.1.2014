@@ -5,11 +5,13 @@ class Reposicion < ActiveRecord::Base
 		rep = Reposicion.where(:fueRepuesto=>false)
 		rep.each do |repos|
 			if segundo_antes_primero(fActual,repos.fecha)
-				almacen =repos.almacenId.to_s
+				almacenOrigen =repos.almacenId.to_s
 				sku = repos.sku.to_s
 				id=repos.id
 				Reposicion.where(:id=>id).last.update_attributes(:fueRepuesto=>true)
-				#Stock.movStockUn(almacen,sku)
+				depots = Stock.getDepots
+	    		almacenPrincipal_id = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first["_id"]
+				Stock.movStockSku (almacenOrigen, almacenPrincipal_id, sku, 1, false)
 			end 
 		end
 	end

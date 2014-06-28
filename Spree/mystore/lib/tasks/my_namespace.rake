@@ -1,14 +1,14 @@
 namespace :my_namespace do
-  desc "TODO"
+  desc "Tareas cada 1 minuto"
   task my_task1: :environment do
   end
 
-  desc "TODO"
+  desc "Tareas cada 5 minutos"
   task my_task5: :environment do
   	exec("java -cp bin:/home/administrator/commandsapp/src/commons-lang-2.6.jar:/home/administrator/commandsapp/src/commons-logging-1.1.3.jar:/home/administrator/commandsapp/src/jackcess-2.0.2.jar:/home/administrator/commandsapp/src/opencsv-2.3.jar principal.main")
     end
 
-  desc "TODO"
+  desc "Tareas cada 10 minutos"
   task my_task3: :environment do
     puts "\nInicio"
     puts DateTime.now
@@ -20,11 +20,14 @@ namespace :my_namespace do
     puts "3"
     puts Offer.cambiarPrecio
     puts "4"
-    #Reposicion.reponer
+    puts Reposicion.reponer
     puts "Termino"
+    puts "M1"
+    Gdoc.obtain_info
+    puts "M2"
   end
 
-  desc "TODO"
+  desc "Tareas cada 10 minutos"
   task my_task10: :environment do
     puts "\nInicio"
     puts DateTime.now
@@ -34,17 +37,15 @@ namespace :my_namespace do
     puts "Ordenes procesadas"
   end
 
-  desc "TODO"
+  desc "Tareas cada 1 hora"
   task my_task60: :environment do
     puts "\nInicio"
     puts DateTime.now
     #puts Schedule.delivery
     puts "Ordenes despachadas"
-    puts Stock.vaciarAlmacenRecepcion
-    puts "Almacen Recepcion vaciada"
   end
 
-  desc "TODO"
+  desc "Tareas 1 vez al dia"
   task my_taskDia: :environment do
     puts "\nInicio"
     puts DateTime.now
@@ -56,7 +57,7 @@ namespace :my_namespace do
     puts "Precios revisados"
   end
 
-  desc "TODO"
+  desc "Tareas 1 vez al mes"
   task my_taskMes: :environment do
   end
 

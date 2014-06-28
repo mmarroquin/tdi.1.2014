@@ -64,7 +64,8 @@ end
 gem 'spree', '2.2.1'
 gem 'spree_gateway', :git => 'https://github.com/spree/spree_gateway.git', :branch => '2-2-stable'
 gem 'spree_auth_devise', :git => 'https://github.com/spree/spree_auth_devise.git', :branch => '2-2-stable'
-
+gem 'spree_core'
+gem 'spree_backend'
 
 
 #gem 'spree_blue_theme', :git => 'git://github.com/spree/spree_blue_theme.git'
@@ -98,5 +99,8 @@ gem 'mongoid', '~> 4.0.0.beta1', git: 'https://github.com/mongoid/mongoid'
 gem 'moped'
 gem 'bson'
 gem 'bson_ext'
+
+gem 'gmaps4rails'
+gem 'geocoder'
 
 #gem 'versionist'

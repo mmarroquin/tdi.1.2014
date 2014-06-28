@@ -156,6 +156,8 @@ GEM
     friendly_id (5.0.3)
       activerecord (>= 4.0.0)
     fssm (0.2.10)
+    geocoder (1.2.2)
+    gmaps4rails (2.1.2)
     googlecharts (1.6.8)
     highline (1.6.21)
     hike (1.2.3)
@@ -374,6 +376,8 @@ DEPENDENCIES
   bson_ext
   bunny
   coffee-rails (~> 4.0.0)
+  geocoder
+  gmaps4rails
   google_drive!
   googlecharts
   highline (>= 1.5.1)
@@ -394,6 +398,8 @@ DEPENDENCIES
   sdoc
   spree (= 2.2.1)
   spree_auth_devise!
+  spree_backend
+  spree_core
   spree_fancy!
   spree_gateway!
   sqlite3

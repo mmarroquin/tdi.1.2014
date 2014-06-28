@@ -207,12 +207,13 @@ class Stock < ActiveRecord::Base
 		    cantidadProd = prod[:cant].to_i
 		    if responseEspera.find { |producto| producto['_id'] == prod[:sku] }
 				
-				responseStockD= getSkusUn(almacenEspera_id, prod[:sku], cantidadProd)
+				responseStockD = getSkusUn(almacenEspera_id, prod[:sku], cantidadProd)
 		    	prod[:cant_mov] = 0
 		    
 		    	responseStockD.each do |prodUnidad|
 		    		movStockUn(almacenDespacho_id, prodUnidad["_id"])
-
+		    		
+		    		url = "http://bodega-integracion-2014.herokuapp.com/stock"
 					authorizationEnv = Base64.encode64(OpenSSL::HMAC.digest('sha1', @@password, "DELETE" + prodUnidad["_id"] + direccion + price_prod + pedidoId))
 		    		responseEnv = HTTParty.delete(url,:body => { :productoId => prodUnidad["_id"], :direccion => direccion, :precio => price_prod, :pedidoId => pedidoId },:headers => { "Authorization" => "UC "+ @@user + ":" + authorizationEnv})
 		    		
