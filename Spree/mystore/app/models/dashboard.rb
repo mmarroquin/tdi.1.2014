@@ -79,7 +79,7 @@ class Dashboard < ActiveRecord::Base
 			if arreglo.count > 0
 				encontrado = false
 				if (not encontrado)
-					arreglo.each do a
+					arreglo.each do |a|
 						id = a.id_order
 						orden = FileOrder.find_all_by_no_order(id)
 						if orden.count > 0
