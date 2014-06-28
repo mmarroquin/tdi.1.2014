@@ -60,7 +60,7 @@ class Dashboard < ActiveRecord::Base
 			grafico = Gchart.pie_3d(:title => "Porcentaje de despachos efectivos vs quebrados",
 				:labels => ["Despachos efectivos", "Despachos quebrados"],
 				:data => [total_despachados,dif],
-				:size => '400x200')
+				:size => '600x200')
 			return grafico
 		else
 			return "La BD de Reportes esta vacia"
@@ -100,7 +100,7 @@ class Dashboard < ActiveRecord::Base
 		grafico = Gchart.pie_3d(:title => "Porcentaje de ofertas exitosas",
 				:labels => ["Ofertas sin ventas", "Ofertas con ventas"],
 				:data => [dif,total],
-				:size => '400x200')
+				:size => '600x200')
 		return grafico
 	end
 
