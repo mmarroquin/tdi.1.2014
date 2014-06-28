@@ -83,7 +83,8 @@ class Dashboard < ActiveRecord::Base
 						id = a.id_order
 						orden = FileOrder.find_all_by_no_order(id)
 						if orden.count > 0
-							if orden.orderDate > o.inicio and orden.orderDate < o.fin and (not encontrado)
+							orden.each do |b|
+							if b.orderDate > o.inicio and b.orderDate < o.fin and (not encontrado)
 								total = total+1
 								encontrado = true
 							end
