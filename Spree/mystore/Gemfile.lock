@@ -398,6 +398,8 @@ DEPENDENCIES
   sdoc
   spree (= 2.2.1)
   spree_auth_devise!
+  spree_backend
+  spree_core
   spree_fancy!
   spree_gateway!
   sqlite3

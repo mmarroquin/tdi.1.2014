@@ -50,8 +50,17 @@ class Schedule < ActiveRecord::Base
 	def self.prueba
 
 		#a = DataWarehouse::DeliveredProduct.where(cliente_id: "5920406-8")
-		a = DataWarehouse::DeliveredProduct.first
-		puts a
+		#Spree::Order.first
+
+		#create_table "spree_stock_items", force: true do |t|
+    	#t.integer  "stock_location_id"
+    	#t.integer  "variant_id"
+    	#t.integer  "count_on_hand", 
+
+    	a = Spree::StockItem.where(:varian_id => Spree::Product.first.id).first.stock_location_id
+    	b = Spree::StockItem.where(:varian_id => Spree::Product.first.id).first.count_of_hand
+    	puts a
+    	puts b
 	end
 
 	def self.delivery
