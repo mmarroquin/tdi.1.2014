@@ -57,7 +57,7 @@ class Dashboard < ActiveRecord::Base
 		dif = total_prods - total_despachados
 
 		if total_prods != 0 and total_despachados != 0
-			grafico = Gchart.pie_3d(:title => "Torta de despachos efectivos vs quebrados",
+			grafico = Gchart.pie_3d(:title => "Porcentaje de despachos efectivos vs quebrados",
 				:labels => ["Despachos efectivos", "Despachos quebrados"],
 				:data => [total_despachados,dif],
 				:size => '400x200')
@@ -65,6 +65,66 @@ class Dashboard < ActiveRecord::Base
 		else
 			return "La BD de Reportes esta vacia"
 		end
+	end
+
+	def self.plot_porcentaje_despachos_suplidos_pedidos_quebrados
+		return 0
+	end
+
+	def self.plot_ofertas
+		total = 0
+		Offer.all.each do |o|
+			sku = o.sku
+			arreglo = FileOrder.find_by_sku_order(sku)
+			if arreglo.count > 0
+				encontrado = false
+				arreglo.each do a
+					if a.orderDate > o.inicio and a.orderDate < o.fin and (not encontrado)
+						total = total+1
+						encontrado = true
+					end
+				end
+			end
+		end
+
+		total_ofertas = Offer.count
+		dif = total_ofertas - total
+		grafico = Gchart.pie_3d(:title => "Porcentaje de ofertas exitosas",
+				:labels => ["Ofertas sin ventas", "Ofertas con ventas"],
+				:data => [dif,total],
+				:size => '400x200')
+		return grafico
+	end
+
+	def self.plot_histograma_atrasos_ultimo_mes
+		contador = [0,0,0,0,0,0,0]
+		i = 0
+		while i < 30
+			atraso = BD.atrasados.where(date: today-i)
+			atraso.each do |a|
+				if atraso < 10
+					contador[0] = contador[0]+1
+				elsif atraso < 30
+					contador[1] = contador[1]+1
+				elsif atraso < 60
+					contador[2] = contador[2]+1
+				elsif atraso < 60*6
+					contador[3] = contador[3]+1
+				elsif atraso < 60*12
+					contador[4] = contador[4]+1
+				elsif atraso < 60*24
+					contador[5] = contador[5]+1
+				else
+					contador[6] = contador[6]+1
+				end
+			end
+		end
+
+
+		grafico = Gchart.bar(:title => "Histograma de atrasos",
+			:labels => ["0-10","10-30","30-60","1h-6h","6h-12h","12h-24h","1dia+"],
+			:data => contador)
+		return grafico
 	end
 
 #	def self.plot_bar
