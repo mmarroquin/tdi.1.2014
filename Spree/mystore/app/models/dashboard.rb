@@ -166,11 +166,13 @@ class Dashboard < ActiveRecord::Base
 			if i < iteraciones -1
 				index = 0
 				index = b.index(b.max)
-				aux_a << a[index]
-				aux_b << b[index]
+				if index
+					aux_a << a[index]
+					aux_b << b[index]
 
-				a.delete_at(index)
-				b.delete_at(index)
+					a.delete_at(index)
+					b.delete_at(index)
+				end
 			else
 				aux_a << "Otros"
 				aux_b << b.inject{|sum, x| sum + x}
