@@ -41,7 +41,7 @@ class Dashboard < ActiveRecord::Base
 		dif = total_prods - total_online
 
 		if total_prods != 0 and total_online != 0
-			grafico = Gchart.pie_3d(:title => "Torta de productos publicados online",
+			grafico = Gchart.pie_3d(:title => "Porcentaje de productos publicados online vs no disponibles online",
 				:labels => ["Disponible online", "No disponible desde la web"],
 				:data => [total_online,dif],
 				:size => '400x200')
