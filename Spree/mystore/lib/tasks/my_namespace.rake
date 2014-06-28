@@ -33,15 +33,15 @@ namespace :my_namespace do
     puts DateTime.now
     puts Schedule.new_orders
     puts "Ordenes Revisadas y Actualizadas"
-    #puts Schedule.main
-    puts "Ordenes procesadas"
   end
 
   desc "Tareas cada 1 hora"
   task my_task60: :environment do
     puts "\nInicio"
     puts DateTime.now
-    #puts Schedule.delivery
+    puts Schedule.main
+    puts "Ordenes procesadas"
+    puts Schedule.delivery
     puts "Ordenes despachadas"
   end
 
@@ -55,6 +55,7 @@ namespace :my_namespace do
     puts "Reservas revisadas"
     puts Schedule.new_pricing
     puts "Precios revisados"
+    
   end
 
   desc "Tareas 1 vez al mes"
