@@ -1,5 +1,5 @@
-class Pasar
-  include ActiveModel::Model
+class Pasar< ActiveRecord::Base
+
   
   def Pasar.Spree
 		puts "A"
