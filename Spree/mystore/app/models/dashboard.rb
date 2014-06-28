@@ -141,16 +141,18 @@ class Dashboard < ActiveRecord::Base
 		Order.all.each do |o|
 			sku = o.sku_order
 			p = WebProduct.find_by_sku(sku)
-			if not a.include?(p.category)
-				a << p.category
-				b << 1
-			else
-				i = 0
-				while i < a.count
-					if a[i] == p.category
-						b[i] = b[i] +1
+			if p
+				if not a.include?(p.category)
+					a << p.category
+					b << 1
+				else
+					i = 0
+					while i < a.count
+						if a[i] == p.category
+							b[i] = b[i] +1
+						end
+						i = i+1
 					end
-					i = i+1
 				end
 			end
 		end
