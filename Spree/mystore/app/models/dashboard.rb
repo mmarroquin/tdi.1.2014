@@ -156,7 +156,7 @@ class Dashboard < ActiveRecord::Base
 				end
 			end
 		end
-		grafico = Gchart.bar(:title => "Ventas por categoria de producto",
+		grafico = Gchart.pie_3d(:title => "Ventas por categoria de producto",
 			:labels => a,
 			:data => b)
 		return grafico
