@@ -145,10 +145,12 @@ class Dashboard < ActiveRecord::Base
 				a << p.category
 				b << 1
 			else
-				for i < r.count
+				i = 0
+				while i < r.count
 					if a[i] == p.category
 						b[i] = b[i] +1
 					end
+					i = i+1
 				end
 			end
 		end
