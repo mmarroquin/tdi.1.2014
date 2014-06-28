@@ -141,20 +141,54 @@ class Dashboard < ActiveRecord::Base
 		Order.all.each do |o|
 			sku = o.sku_order
 			p = WebProduct.find_by_sku(sku)
-			if not a.include?(p.category)
-				a << p.category
-				b << 1
-			else
-				for i < r.count
-					if a[i] == p.category
-						b[i] = b[i] +1
+			if p
+				if not a.include?(p.category)
+					a << p.category
+					b << 1
+				else
+					i = 0
+					while i < a.count
+						if a[i] == p.category
+							b[i] = b[i] +1
+						end
+						i = i+1
 					end
 				end
 			end
 		end
+
+		aux_a = []
+		aux_b = []
+
+		i = 0
+		iteraciones = 5
+		while i < iteraciones do
+			if i < iteraciones -1
+				index = 0
+				index = b.index(b.max)
+				if index
+					aux_a << a[index]
+					aux_b << b[index]
+
+					a.delete_at(index)
+					b.delete_at(index)
+				end
+			else
+				aux_a << "Otros"
+				aux_b << b.inject{|sum, x| sum + x}
+			end
+
+			i = i +1
+				
+		end
+
+
 		grafico = Gchart.bar(:title => "Ventas por categoria de producto",
-			:labels => a,
-			:data => b)
+			:labels => aux_a,
+			:data => aux_b,
+			:size => '600x200')
+
+		
 		return grafico
 	end
 
