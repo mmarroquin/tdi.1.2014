@@ -9,24 +9,24 @@
     </tr>
   </thead>
   <center>
-<%= image_tag @graph2 %>
+<%= image_tag @graph2 %><br>
 Representa la cantidad de reservas realizadas en el Spreadsheet por día durante la última semana.
 <br><hr>
 <% if @graph7 ==  "La BD de Reportes esta vacia"%>
   La BD de Reportes está vacía
 <% else %>
-  <%= image_tag @graph7 %>
+  <%= image_tag @graph7 %><br>
   Representa la división según porcentajes entre los despachos que se han realizado efectivamente y los que han sido quebrados.
 <% end %>
 <br><hr>
 <% if @graph6 ==  "La BD de productos o la BD de WebProductos esta vacia"%>
   La BD de productos o la BD de WebProductos está vacía
 <% else %>
-  <%= image_tag @graph6 %>
+  <%= image_tag @graph6 %><br>
   Representa la división en porcentaje entre los productos que disponen de venta online, y aquellos que no se pueden comprar virtualmente.
 <% end %>
 <br><hr>
-<%= image_tag @graph8 %>
+<%= image_tag @graph8 %><br>
 Representa la cantidad de ofertas, dentro del total, que han obtenido al menos una venta.
 <br><hr>
 
