@@ -135,6 +135,29 @@ class Dashboard < ActiveRecord::Base
 		return grafico
 	end
 
+	def self.plot_cantidad_d_prods_por_tipo
+		a = []
+		b = []
+		Order.all.each do |o|
+			sku = o.sku_order
+			p = WebProduct.find_by_sku(sku)
+			if not a.include?(p.category)
+				a << p.category
+				b << 1
+			else
+				for i < r.count
+					if a[i] == p.category
+						b[i] = b[i] +1
+					end
+				end
+			end
+		end
+		grafico = Gchart.bar(:title => "Ventas por categoria de producto",
+			:labels => a,
+			:data => b)
+		return grafico
+	end
+
 #	def self.plot_bar
 #		grafico = Gchart.bar( :data => [[1,2,4,67,100,41,234],[45,23,67,12,67,300, 250]], 
  #           :title => 'SD Ruby Fu level', 
