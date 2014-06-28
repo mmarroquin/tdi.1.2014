@@ -1,7 +1,7 @@
 class Pasar< ActiveRecord::Base
 
   
-  def Pasar.Spree
+  def self.Spree
 		puts "A"
 		
 		string = '{"desc":{"someKey":"someValue","anotherKey":"value"},"main_item":{"stats":{"a":8,"b":12,"c":10}}}'
@@ -21,7 +21,7 @@ class Pasar< ActiveRecord::Base
 		puts "B"
 		end
 
-	def Pasar.SetearStockID(id, stock)
+	def self.SetearStockID(id, stock)
 		puts "a"
 		#Spree::Product.where(:name=>'Saco De Dormir Nepal').total_on_hand
 		#p=Spree::Product.where(:name=>'Saco De Dormir Nepal')
@@ -35,7 +35,7 @@ class Pasar< ActiveRecord::Base
 		puts "b"
 	end
 
-	def Pasar.SetearStockNombre(nombreP, stock)
+	def self.SetearStockNombre(nombreP, stock)
 		puts "a"
 		#Spree::Product.where(:name=>'Saco De Dormir Nepal').total_on_hand
 		#p=Spree::Product.where(:name=>'Saco De Dormir Nepal')
