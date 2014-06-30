@@ -142,13 +142,13 @@ class Dashboard < ActiveRecord::Base
 			sku = o.sku_order
 			p = WebProduct.find_by_sku(sku)
 			if p
-				if not a.include?(p.category)
-					a << p.category
+				if not a.include?(p.category.split(',')[0])
+					a << p.category.split(',')[0]
 					b << 1
 				else
 					i = 0
 					while i < a.count
-						if a[i] == p.category
+						if a[i] == p.category.split(',')[0]
 							b[i] = b[i] +1
 						end
 						i = i+1
@@ -168,7 +168,7 @@ class Dashboard < ActiveRecord::Base
 				index = b.index(b.max)
 				if index
 					aux_a << a[index]
-					aux_b << b[index]
+					aux_b << [b[index]]
 
 					a.delete_at(index)
 					b.delete_at(index)
@@ -183,9 +183,14 @@ class Dashboard < ActiveRecord::Base
 		end
 
 
-		grafico = Gchart.bar(:title => "Ventas por categoria de producto",
-			:labels => aux_a[0..aux_a.count-2],
+		grafico = Gchart.bar(:title => "Top categorias de ventas",
+			:legend => aux_a[0..aux_a.count-2],
 			:data => aux_b[0..aux_b.count-2],
+			:stacked => false,
+			:bar_colors => ["FF0000,FFFF00,00FF00,0000FF"],
+			:axis_with_labels => ['y'],
+			:axis_labels => [[100,200,300,400,500,600,700]],
+			:alignment => :center,
 			:size => '600x200')
 		
 		return grafico

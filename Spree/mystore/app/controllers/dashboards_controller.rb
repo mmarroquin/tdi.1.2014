@@ -5,8 +5,8 @@ class DashboardsController < ApplicationController
   # GET /dashboards.json
   def index
     
-    @graph = Dashboard.plot
-    @graph2 = Dashboard.plot_reservations
+#    @graph = Dashboard.plot
+#    @graph2 = Dashboard.plot_reservations
     @graph6 = Dashboard.plot_porcentaje_de_prods_online
     @graph7 = Dashboard.plot_porcentaje_de_despachos_quebrados
     @graph8 = Dashboard.plot_ofertas
