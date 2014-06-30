@@ -13,12 +13,15 @@ class Stock < ActiveRecord::Base
 		depots = getDepots
 		almacenPrincipal = depots.select { |almacen| almacen['despacho'] == false &&  almacen['recepcion'] == false && almacen['pulmon'] == false}.first
 		almacenPrincipal_id = almacenPrincipal["_id"]
+		puts almacenPrincipal_id
 		responsePrincipal = getSkus(almacenPrincipal_id) 
+
 		if responsePrincipal.find { |producto| producto['_id'] == sku } #|| responseRecepcion.find { |producto| producto['_id'] == prod[:sku] }
 
 		    if prodActual = responsePrincipal.find { |producto| producto['_id'] == sku }
-		        return stockPrincipal = prodActual["total"]
-			        
+		        puts prodActual["total"]
+			return  prodActual["total"]
+					        
 		    end
 		end
 	end
