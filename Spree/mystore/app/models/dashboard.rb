@@ -21,16 +21,16 @@ class Dashboard < ActiveRecord::Base
 		total_date = Reservation.count
 		today = Date.current
 		now = Reservation.where(date: today).count
-		yest = Reservation.where(date: today-1).count
-		dayb = Reservation.where(date: today-2).count
-		daybb = Reservation.where(date: today-3).count
-		daybbb = Reservation.where(date: today-4).count
-		daybbbb = Reservation.where(date: today-5).count
-		daybbbbb = Reservation.where(date: today-6).count
+		yest = Reservation.where(date: today-1.days).count
+		dayb = Reservation.where(date: today-2.days).count
+		daybb = Reservation.where(date: today-3.days).count
+		daybbb = Reservation.where(date: today-4.days).count
+		daybbbb = Reservation.where(date: today-5.days).count
+		daybbbbb = Reservation.where(date: today-6.days).count
 
 
 		grafico = Gchart.bar(:title => "Reservations per day in the week",
-			:labels => [today,today-1,today-2,today-3,today-4,today-5,today-6],
+			:labels => [today,today-1.days,today-2.days,today-3.days,today-4.days,today-5.days,today-6.days],
 			:data => [now, yest, dayb, daybb, daybbb, daybbbb, daybbbbb])
 		return grafico
 	end	
@@ -52,14 +52,13 @@ class Dashboard < ActiveRecord::Base
 	end
 
 	def self.plot_porcentaje_de_despachos_quebrados
-		total_prods = Report.count
-		total_despachados = Report.where(despachado: true).count
-		dif = total_prods - total_despachados
+		total_quebrados = Order.where(:broked => true).count
+		total_despachados = Order.where(:broked => false, :delivered => true)
 
 		if total_prods != 0 and total_despachados != 0
 			grafico = Gchart.pie_3d(:title => "Porcentaje de despachos efectivos vs quebrados",
 				:labels => ["Despachos efectivos", "Despachos quebrados"],
-				:data => [total_despachados,dif],
+				:data => [total_despachados,total_quebrados],
 				:size => '600x200')
 			return grafico
 		else
