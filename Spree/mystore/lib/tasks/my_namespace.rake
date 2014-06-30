@@ -39,6 +39,10 @@ namespace :my_namespace do
   task my_task60: :environment do
     puts "\nInicio"
     puts DateTime.now
+#    puts Schedule.main
+    puts "Ordenes procesadas"
+#    puts Schedule.delivery
+    puts "Ordenes despachadas"
   end
 
   desc "Tareas 1 vez al dia"
