@@ -10,7 +10,11 @@ namespace :my_namespace do
 
   desc "Tareas cada 10 minutos"
   task my_task3: :environment do
+
     puts "\nInicio"
+    puts "M1"
+    Gdoc.obtain_info
+    puts "M2"
     puts DateTime.now
     puts Rabbitmpq.leerReposicion
     puts "1"
@@ -22,10 +26,10 @@ namespace :my_namespace do
     puts "4"
     puts Reposicion.reponer
     puts "Termino"
-    puts "M1"
-    Gdoc.obtain_info
-    puts "M2"
+    
   end
+
+
 
   desc "Tareas cada 10 minutos"
   task my_task10: :environment do
